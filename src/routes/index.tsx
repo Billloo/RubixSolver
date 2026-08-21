@@ -39,7 +39,7 @@ function Index() {
               <span className="text-primary">Get the turns.</span>
             </h1>
             <p className="mt-6 max-w-lg text-lg text-muted-foreground">
-              Cubelab reads the exact state of your scrambled cube and hands back the shortest
+              RubixSolver reads the exact state of your scrambled cube and hands back the shortest
               sequence of moves!
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
