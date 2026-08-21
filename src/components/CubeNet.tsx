@@ -24,8 +24,8 @@ const CELL: Record<number, number> = { 2: 44, 3: 34, 4: 26, 5: 22 };
 interface CubeNetProps {
   state: CubeState;
   editable?: boolean;
-  onPaint?: (face: number, index: number) => void;
-  className?: string;
+  onPaint?: ((face: number, index: number) => void) | undefined;
+  className?: string | undefined;
 }
 
 function Face({
@@ -39,7 +39,7 @@ function Face({
   face: number;
   n: number;
   editable: boolean;
-  onPaint?: (face: number, index: number) => void;
+  onPaint?: ((face: number, index: number) => void) | undefined;
 }) {
   const cell = CELL[n] ?? 24;
   const key = FACE_ORDER[face]!;
