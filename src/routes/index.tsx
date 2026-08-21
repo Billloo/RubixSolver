@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { applyAlg, solvedState } from "@/lib/cube/model";
 import { PUZZLES } from "@/lib/cube/puzzles";
 
-const title = "Cubelab — Rubik's Cube Solver for 2x2, 3x3, 4x4 and 5x5";
+const title = "Cubelab — Rubik's Cube Solver for 2x2 and 3x3";
 const description =
-  "Enter the colors of your cube and get a clean, step-by-step solution. Optimal 2x2 solving, 20-move 3x3 solving, and guided methods for bigger cubes.";
+  "Enter the colors of your cube and get a clean, step-by-step solution. Optimal 2x2 solving and 20-move 3x3 solving.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -63,8 +63,8 @@ function Index() {
 
       <section className="mx-auto w-full max-w-6xl px-4 pb-6 sm:px-6">
         <h2 className="text-2xl font-semibold">Pick your puzzle</h2>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {PUZZLES.map((p) => (
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          {PUZZLES.filter((p) => p.slug === "2x2" || p.slug === "3x3").map((p) => (
             <Link
               key={p.slug}
               to="/solver/$puzzle"
@@ -73,14 +73,8 @@ function Index() {
             >
               <div className="flex items-center justify-between">
                 <span className="font-display text-3xl font-semibold">{p.slug}</span>
-                <span
-                  className={
-                    p.solvable
-                      ? "rounded-full bg-primary/15 px-2.5 py-1 text-xs text-primary"
-                      : "rounded-full bg-surface-2 px-2.5 py-1 text-xs text-muted-foreground"
-                  }
-                >
-                  {p.solvable ? "Auto solver" : "Guided method"}
+                <span className="rounded-full bg-primary/15 px-2.5 py-1 text-xs text-primary">
+                  Auto solver
                 </span>
               </div>
               <div>
