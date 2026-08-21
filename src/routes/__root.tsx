@@ -146,11 +146,6 @@ function RootComponent() {
         <main className="flex-1">
           <Outlet />
         </main>
-        <footer className="border-t border-border/70 py-8">
-          <p className="mx-auto w-full max-w-6xl px-4 text-sm text-muted-foreground sm:px-6">
-            Cubelab — everything runs in your browser. No cube states leave your device.
-          </p>
-        </footer>
       </div>
     </QueryClientProvider>
   );
