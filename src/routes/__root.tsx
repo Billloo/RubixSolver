@@ -128,7 +128,7 @@ function RootComponent() {
               Rubix<span className="text-primary">Solver</span>
             </Link>
             <nav className="flex items-center gap-1 text-sm">
-              {["2x2", "3x3", "4x4", "5x5"].map((slug) => (
+              {["2x2", "3x3"].map((slug) => (
                 <Link
                   key={slug}
                   to="/solver/$puzzle"
