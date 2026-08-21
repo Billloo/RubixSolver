@@ -40,7 +40,7 @@ function Index() {
             </h1>
             <p className="mt-6 max-w-lg text-lg text-muted-foreground">
               Cubelab reads the exact state of your scrambled cube and hands back the shortest
-              sequence of moves — one clear instruction at a time, no jargon required.
+              sequence of moves!
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button size="lg" asChild>
