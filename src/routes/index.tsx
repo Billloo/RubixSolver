@@ -55,7 +55,7 @@ function Index() {
               </Button>
             </div>
           </div>
-          <div className="panel flex justify-center overflow-x-auto p-6">
+          <div className="panel flex justify-center p-6">
             <CubeNet state={PREVIEW} />
           </div>
         </div>
