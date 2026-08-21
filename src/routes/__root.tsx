@@ -77,11 +77,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { name: "author", content: "Cubelab" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
@@ -92,6 +88,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -119,8 +121,37 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <div className="flex min-h-screen flex-col bg-background text-foreground">
+        <header className="sticky top-0 z-20 border-b border-border/70 bg-background/85 backdrop-blur">
+          <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+            <Link to="/" className="font-display text-lg font-semibold tracking-tight">
+              Cube<span className="text-primary">lab</span>
+            </Link>
+            <nav className="flex items-center gap-1 text-sm">
+              {["2x2", "3x3", "4x4", "5x5"].map((slug) => (
+                <Link
+                  key={slug}
+                  to="/solver/$puzzle"
+                  params={{ puzzle: slug }}
+                  activeProps={{ className: "text-primary" }}
+                  className="rounded-lg px-3 py-1.5 text-muted-foreground transition hover:text-foreground"
+                >
+                  {slug}
+                </Link>
+              ))}
+            </nav>
+          </div>
+        </header>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <main className="flex-1">
+          <Outlet />
+        </main>
+        <footer className="border-t border-border/70 py-8">
+          <p className="mx-auto w-full max-w-6xl px-4 text-sm text-muted-foreground sm:px-6">
+            Cubelab — everything runs in your browser. No cube states leave your device.
+          </p>
+        </footer>
+      </div>
     </QueryClientProvider>
   );
 }
