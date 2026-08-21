@@ -10,11 +10,35 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NotationRouteImport } from './routes/notation'
+import { Route as TimerRouteImport } from './routes/timer'
+import { Route as LangIndexRouteImport } from './routes/$lang.index'
+import { Route as LangSplatRouteImport } from './routes/$lang.$'
 import { Route as SolverPuzzleRouteImport } from './routes/solver.$puzzle'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotationRoute = NotationRouteImport.update({
+  id: '/notation',
+  path: '/notation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimerRoute = TimerRouteImport.update({
+  id: '/timer',
+  path: '/timer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LangIndexRoute = LangIndexRouteImport.update({
+  id: '/$lang/',
+  path: '/$lang/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LangSplatRoute = LangSplatRouteImport.update({
+  id: '/$lang/$',
+  path: '/$lang/$',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SolverPuzzleRoute = SolverPuzzleRouteImport.update({
@@ -25,28 +49,52 @@ const SolverPuzzleRoute = SolverPuzzleRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/notation': typeof NotationRoute
+  '/timer': typeof TimerRoute
+  '/$lang/$': typeof LangSplatRoute
   '/solver/$puzzle': typeof SolverPuzzleRoute
+  '/$lang/': typeof LangIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/notation': typeof NotationRoute
+  '/timer': typeof TimerRoute
+  '/$lang/$': typeof LangSplatRoute
   '/solver/$puzzle': typeof SolverPuzzleRoute
+  '/$lang': typeof LangIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/notation': typeof NotationRoute
+  '/timer': typeof TimerRoute
+  '/$lang/$': typeof LangSplatRoute
   '/solver/$puzzle': typeof SolverPuzzleRoute
+  '/$lang/': typeof LangIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/solver/$puzzle'
+  fullPaths:
+    '/' | '/notation' | '/timer' | '/$lang/$' | '/solver/$puzzle' | '/$lang/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/solver/$puzzle'
-  id: '__root__' | '/' | '/solver/$puzzle'
+  to: '/' | '/notation' | '/timer' | '/$lang/$' | '/solver/$puzzle' | '/$lang'
+  id:
+    | '__root__'
+    | '/'
+    | '/notation'
+    | '/timer'
+    | '/$lang/$'
+    | '/solver/$puzzle'
+    | '/$lang/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  NotationRoute: typeof NotationRoute
+  TimerRoute: typeof TimerRoute
+  LangSplatRoute: typeof LangSplatRoute
   SolverPuzzleRoute: typeof SolverPuzzleRoute
+  LangIndexRoute: typeof LangIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -56,6 +104,34 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notation': {
+      id: '/notation'
+      path: '/notation'
+      fullPath: '/notation'
+      preLoaderRoute: typeof NotationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/timer': {
+      id: '/timer'
+      path: '/timer'
+      fullPath: '/timer'
+      preLoaderRoute: typeof TimerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$lang/': {
+      id: '/$lang/'
+      path: '/$lang'
+      fullPath: '/$lang/'
+      preLoaderRoute: typeof LangIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$lang/$': {
+      id: '/$lang/$'
+      path: '/$lang/$'
+      fullPath: '/$lang/$'
+      preLoaderRoute: typeof LangSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/solver/$puzzle': {
@@ -70,7 +146,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  NotationRoute: NotationRoute,
+  TimerRoute: TimerRoute,
+  LangSplatRoute: LangSplatRoute,
   SolverPuzzleRoute: SolverPuzzleRoute,
+  LangIndexRoute: LangIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

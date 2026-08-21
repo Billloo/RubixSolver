@@ -8,9 +8,9 @@ export const Route = createFileRoute("/timer")({
 });
 
 type Solve = { time: number; scramble: string };
-const faces = ["R", "L", "U", "D", "F", "B"];
-const suffixes = ["", "'", "2"];
-const makeScramble = () => { const out: string[] = []; let last = ""; while (out.length < 20) { const face = faces[Math.floor(Math.random() * faces.length)]; if (face === last) continue; out.push(face + suffixes[Math.floor(Math.random() * suffixes.length)]); last = face; } return out.join(" "); };
+const faces = ["R", "L", "U", "D", "F", "B"] as const;
+const suffixes = ["", "'", "2"] as const;
+const makeScramble = () => { const out: string[] = []; let last = ""; while (out.length < 20) { const face = faces[Math.floor(Math.random() * faces.length)]!; if (face === last) continue; out.push(face + suffixes[Math.floor(Math.random() * suffixes.length)]!); last = face; } return out.join(" "); };
 const formatTime = (ms: number) => { const s = ms / 1000; return s < 60 ? s.toFixed(2) : `${Math.floor(s / 60)}:${(s % 60).toFixed(2).padStart(5, "0")}`; };
 
 function TimerPage() {
