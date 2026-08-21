@@ -7,7 +7,8 @@ export const Route = createFileRoute("/notation")({
       { title: "Rubik's Cube Notation — RubixSolver" },
       {
         name: "description",
-        content: "Learn Rubik's Cube move notation with clear visual diagrams for every basic face turn, prime turn, and double turn.",
+        content:
+          "Learn Rubik's Cube move notation with clear 3D visual diagrams for every basic face turn, prime turn, and double turn.",
       },
     ],
   }),
@@ -35,27 +36,78 @@ const moves = [
   { move: "B2", face: "Back double", description: "Turn the back face 180 degrees." },
 ];
 
+type Face = "R" | "L" | "U" | "D" | "F" | "B";
+
+const faceTransforms: Record<Face, string> = {
+  F: "translateZ(58px)",
+  B: "rotateY(180deg) translateZ(58px)",
+  R: "rotateY(90deg) translateZ(58px)",
+  L: "rotateY(-90deg) translateZ(58px)",
+  U: "rotateX(90deg) translateZ(58px)",
+  D: "rotateX(-90deg) translateZ(58px)",
+};
+
+const faceNames: Record<Face, string> = {
+  R: "RIGHT",
+  L: "LEFT",
+  U: "UP",
+  D: "DOWN",
+  F: "FRONT",
+  B: "BACK",
+};
+
+function CubeFace({ face, highlighted }: { face: Face; highlighted: boolean }) {
+  return (
+    <div
+      className={`absolute left-1/2 top-1/2 grid h-[116px] w-[116px] -translate-x-1/2 -translate-y-1/2 grid-cols-3 gap-1 rounded-md border-2 p-1.5 shadow-lg ${
+        highlighted ? "border-primary bg-primary/20" : "border-border bg-surface"
+      }`}
+      style={{ transform: `translate(-50%, -50%) ${faceTransforms[face]}` }}
+    >
+      {Array.from({ length: 9 }).map((_, i) => (
+        <span
+          key={i}
+          className={`rounded-[3px] border ${
+            highlighted
+              ? "border-primary/60 bg-primary/70"
+              : "border-border/80 bg-muted"
+          }`}
+        />
+      ))}
+      <span className="pointer-events-none absolute inset-0 flex items-center justify-center font-display text-[10px] font-bold tracking-wider text-foreground/80">
+        {faceNames[face]}
+      </span>
+    </div>
+  );
+}
+
 function MoveDiagram({ move }: { move: string }) {
+  const face = move[0] as Face;
   const prime = move.includes("'");
   const double = move.includes("2");
-  const angle = double ? 180 : prime ? -90 : 90;
+  const arrowRotation = double ? 180 : prime ? -90 : 90;
+
   return (
-    <div className="flex h-44 items-center justify-center rounded-xl border border-border bg-surface-2">
-      <div className="relative">
-        <div className="grid grid-cols-3 gap-1 rounded-lg border-2 border-border bg-background p-2 shadow-sm">
-          {Array.from({ length: 9 }).map((_, i) => (
-            <span key={i} className="size-7 rounded border border-border bg-cube-r sm:size-8" />
-          ))}
-        </div>
-        <div
-          className="absolute -right-14 top-1/2 -translate-y-1/2 text-primary transition-transform"
-          style={{ transform: `translateY(-50%) rotate(${angle}deg)` }}
-        >
-          <RotateCw className="size-10" />
-        </div>
-        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 font-display text-xl font-semibold text-foreground">
-          {move}
-        </div>
+    <div className="relative flex h-56 items-center justify-center overflow-hidden rounded-xl border border-border bg-surface-2 [perspective:700px]">
+      <div
+        className="relative h-[116px] w-[116px] [transform-style:preserve-3d]"
+        style={{ transform: "rotateX(-22deg) rotateY(-32deg) rotateZ(0deg)" }}
+      >
+        {(["F", "B", "R", "L", "U", "D"] as Face[]).map((cubeFace) => (
+          <CubeFace key={cubeFace} face={cubeFace} highlighted={cubeFace === face} />
+        ))}
+      </div>
+      <div
+        className="absolute right-5 top-1/2 -translate-y-1/2 rounded-full bg-background/90 p-2 text-primary shadow-md"
+        title={double ? "180 degree turn" : prime ? "Counterclockwise turn" : "Clockwise turn"}
+      >
+        <RotateCw
+          className="size-8"
+          style={{ transform: `rotate(${arrowRotation}deg)` }}
+        />
+      </div>
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-border bg-background/90 px-3 py-1 font-display text-lg font-semibold shadow-sm">
+        {move}
       </div>
     </div>
   );
@@ -72,7 +124,7 @@ function NotationPage() {
         <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">Learn the language</p>
         <h1 className="mt-2 text-4xl font-semibold sm:text-5xl">Rubik's Cube Move Notation</h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          Every move in a solution tells you which face to turn and how far. Use the visual guides below to learn the notation used by RubixSolver.
+          Every move in a solution tells you which face to turn and how far. The 3D diagrams below highlight the face being turned so you can quickly understand the notation used by RubixSolver.
         </p>
       </header>
 
