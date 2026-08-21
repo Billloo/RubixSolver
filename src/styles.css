@@ -142,3 +142,89 @@
     color: var(--color-foreground);
   }
 }
+
+/* ---------------------------------------------------------------
+ * Cubelab design system — dark studio theme, teal accent
+ * --------------------------------------------------------------- */
+
+@theme inline {
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --color-cube-w: var(--cube-w);
+  --color-cube-y: var(--cube-y);
+  --color-cube-r: var(--cube-r);
+  --color-cube-o: var(--cube-o);
+  --color-cube-g: var(--cube-g);
+  --color-cube-b: var(--cube-b);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  --background: oklch(0.17 0.018 260);
+  --foreground: oklch(0.97 0.005 260);
+  --surface: oklch(0.22 0.018 262);
+  --surface-2: oklch(0.26 0.019 262);
+  --card: oklch(0.215 0.018 262);
+  --card-foreground: oklch(0.97 0.005 260);
+  --popover: oklch(0.22 0.018 262);
+  --popover-foreground: oklch(0.97 0.005 260);
+
+  --primary: oklch(0.82 0.14 190);
+  --primary-foreground: oklch(0.2 0.03 220);
+  --secondary: oklch(0.28 0.02 262);
+  --secondary-foreground: oklch(0.95 0.005 260);
+  --muted: oklch(0.26 0.018 262);
+  --muted-foreground: oklch(0.72 0.015 260);
+  --accent: oklch(0.3 0.03 200);
+  --accent-foreground: oklch(0.95 0.01 200);
+  --destructive: oklch(0.65 0.19 22);
+  --destructive-foreground: oklch(0.98 0.005 260);
+
+  --border: oklch(0.32 0.017 262);
+  --input: oklch(0.32 0.017 262);
+  --ring: oklch(0.82 0.14 190);
+
+  --cube-w: oklch(0.97 0.002 260);
+  --cube-y: oklch(0.88 0.17 96);
+  --cube-r: oklch(0.62 0.22 27);
+  --cube-o: oklch(0.73 0.18 55);
+  --cube-g: oklch(0.68 0.19 148);
+  --cube-b: oklch(0.6 0.18 250);
+
+  --gradient-hero: radial-gradient(
+      120% 100% at 15% 0%,
+      color-mix(in oklab, var(--primary) 22%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(90% 80% at 100% 10%, oklch(0.55 0.16 300 / 0.18), transparent 65%);
+  --shadow-panel: 0 24px 60px -30px oklch(0 0 0 / 0.9);
+  --shadow-sticker: inset 0 -2px 0 oklch(0 0 0 / 0.18);
+}
+
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@utility hero-glow {
+  background-image: var(--gradient-hero);
+}
+
+@utility panel {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-panel);
+}
