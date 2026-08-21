@@ -14,7 +14,7 @@ export const LANGUAGES = [
 export type Locale = (typeof LANGUAGES)[number]["code"];
 export const LOCALIZED = LANGUAGES.filter((l) => l.code !== "en");
 
-export const copy: Record<Exclude<Locale, "en">, {
+export const copy: Record<Locale, {
   homeTitle: string; homeDescription: string; intro: string; solve3: string; solve2: string;
   notation: string; timer: string; home: string; learn: string; tools: string;
   notationTitle: string; notationDescription: string; timerTitle: string; timerDescription: string;
