@@ -31,8 +31,11 @@ import { getPuzzle, PUZZLES } from "@/lib/cube/puzzles";
 import { GUIDES } from "@/lib/cube/guides";
 import { useSolver } from "@/lib/cube/useSolver";
 
+const AVAILABLE_PUZZLES = PUZZLES.filter((p) => p.slug === "2x2" || p.slug === "3x3");
+
 export const Route = createFileRoute("/solver/$puzzle")({
   loader: ({ params }) => {
+    if (params.puzzle !== "2x2" && params.puzzle !== "3x3") throw notFound();
     const puzzle = getPuzzle(params.puzzle);
     if (!puzzle) throw notFound();
     return { puzzle };
@@ -40,11 +43,11 @@ export const Route = createFileRoute("/solver/$puzzle")({
   head: ({ loaderData }) => {
     if (!loaderData) {
       return {
-        meta: [{ title: "Unavailable — Cubelab" }, { name: "robots", content: "noindex" }],
+        meta: [{ title: "Unavailable — RubixSolver" }, { name: "robots", content: "noindex" }],
       };
     }
     const { puzzle } = loaderData;
-    const title = `${puzzle.slug} Cube Solver — Cubelab`;
+    const title = `${puzzle.slug} Cube Solver — RubixSolver`;
     const description = `Enter the colors of your ${puzzle.slug} cube and get clear step-by-step turning instructions to solve it.`;
     return {
       meta: [
@@ -135,7 +138,6 @@ function SolverPage() {
   };
 
   const scramble = () => reset(applyAlg(solvedState(n), randomScramble(n)));
-
   const guide = GUIDES[puzzle.slug];
 
   return (
@@ -156,7 +158,7 @@ function SolverPage() {
           <p className="mt-2 max-w-xl text-muted-foreground">{puzzle.tagline}</p>
         </div>
         <nav className="flex gap-2">
-          {PUZZLES.map((p) => (
+          {AVAILABLE_PUZZLES.map((p) => (
             <Link
               key={p.slug}
               to="/solver/$puzzle"
@@ -195,12 +197,7 @@ function SolverPage() {
           </p>
 
           <div className="mt-6 overflow-x-auto pb-2">
-            <CubeNet
-              state={displayState}
-              editable={!solution}
-              onPaint={paint}
-              className="mx-auto"
-            />
+            <CubeNet state={displayState} editable={!solution} onPaint={paint} className="mx-auto" />
           </div>
 
           {!solution && (
@@ -236,9 +233,8 @@ function SolverPage() {
             </p>
           )}
 
-          {puzzle.solvable ? (
-            <div className="mt-6 flex flex-wrap gap-3">
-              {!solution && (
+          <div className="mt-6 flex flex-wrap gap-3">
+            {!solution && (
               <Button size="lg" onClick={handleSolve} disabled={busy}>
                 {busy ? (
                   <>
@@ -250,38 +246,23 @@ function SolverPage() {
                   </>
                 )}
               </Button>
-              )}
-              {solution && (
-                <Button variant="secondary" size="lg" onClick={() => reset(state)}>
-                  Edit colors
-                </Button>
-              )}
-              {busy && n === 3 && (
-                <span className="self-center text-sm text-muted-foreground">
-                  First solve builds the lookup tables (a few seconds).
-                </span>
-              )}
-            </div>
-          ) : (
-            <p className="mt-6 rounded-xl border border-border bg-surface-2 px-4 py-3 text-sm text-muted-foreground">
-              Automatic solving for {puzzle.slug} is on the way. Use the guided reduction method on
-              the right — it turns this cube into a 3x3, which the{" "}
-              <Link to="/solver/$puzzle" params={{ puzzle: "3x3" }} className="text-primary">
-                3x3 solver
-              </Link>{" "}
-              finishes for you.
-            </p>
-          )}
+            )}
+            {solution && (
+              <Button variant="secondary" size="lg" onClick={() => reset(state)}>
+                Edit colors
+              </Button>
+            )}
+            {busy && n === 3 && (
+              <span className="self-center text-sm text-muted-foreground">
+                First solve builds the lookup tables (a few seconds).
+              </span>
+            )}
+          </div>
         </section>
 
         <aside className="panel flex flex-col p-5 sm:p-6">
           {solution ? (
-            <SolutionPanel
-              solution={solution}
-              step={step}
-              setStep={setStep}
-              size={stateSize(state)}
-            />
+            <SolutionPanel solution={solution} step={step} setStep={setStep} size={stateSize(state)} />
           ) : guide ? (
             <div>
               <h2 className="text-lg font-semibold">Reduction method</h2>
@@ -291,10 +272,7 @@ function SolverPage() {
                     <h3 className="text-sm font-semibold text-primary">{g.title}</h3>
                     <p className="mt-1 text-sm text-muted-foreground">{g.body}</p>
                     {g.algs?.map((a) => (
-                      <code
-                        key={a}
-                        className="mt-2 block rounded-lg bg-background/70 px-3 py-2 font-mono text-xs text-foreground"
-                      >
+                      <code key={a} className="mt-2 block rounded-lg bg-background/70 px-3 py-2 font-mono text-xs text-foreground">
                         {a}
                       </code>
                     ))}
@@ -337,17 +315,7 @@ function SolverPage() {
   );
 }
 
-function SolutionPanel({
-  solution,
-  step,
-  setStep,
-  size,
-}: {
-  solution: string[];
-  step: number;
-  setStep: (s: number) => void;
-  size: number;
-}) {
+function SolutionPanel({ solution, step, setStep, size }: { solution: string[]; step: number; setStep: (s: number) => void; size: number }) {
   const done = step >= solution.length;
   const current = solution[step];
 
@@ -361,28 +329,18 @@ function SolutionPanel({
       </div>
 
       <div className="mt-4 rounded-xl border border-primary/30 bg-primary/10 p-4 text-center">
-        <div className="font-display text-5xl font-semibold text-primary">
-          {done ? "Solved" : current}
-        </div>
+        <div className="font-display text-5xl font-semibold text-primary">{done ? "Solved" : current}</div>
         <p className="mt-2 text-sm text-muted-foreground">
           {done ? "Every face is complete. Nice work." : describeMove(current!)}
         </p>
       </div>
 
       <div className="mt-4 flex items-center gap-2">
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => setStep(Math.max(0, step - 1))}
-          disabled={step === 0}
-        >
+        <Button variant="secondary" size="sm" onClick={() => setStep(Math.max(0, step - 1))} disabled={step === 0}>
           <ChevronLeft className="size-4" /> Back
         </Button>
         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-2">
-          <div
-            className="h-full rounded-full bg-primary transition-all"
-            style={{ width: `${(step / solution.length) * 100}%` }}
-          />
+          <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${(step / solution.length) * 100}%` }} />
         </div>
         <Button size="sm" onClick={() => setStep(Math.min(solution.length, step + 1))} disabled={done}>
           Next <ChevronRight className="size-4" />
