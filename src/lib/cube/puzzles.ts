@@ -25,22 +25,6 @@ export const PUZZLES: Puzzle[] = [
     solvable: true,
     pieces: "43 quintillion states",
   },
-  {
-    slug: "4x4",
-    name: "Rubik's Revenge",
-    size: 4,
-    tagline: "4x4x4 — guided reduction method with algorithms",
-    solvable: false,
-    pieces: "7.4 quattuordecillion states",
-  },
-  {
-    slug: "5x5",
-    name: "Professor's Cube",
-    size: 5,
-    tagline: "5x5x5 — guided reduction method with algorithms",
-    solvable: false,
-    pieces: "282 tredecillion states",
-  },
 ];
 
 export const getPuzzle = (slug: string): Puzzle | undefined =>
