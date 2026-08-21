@@ -14,14 +14,17 @@ const AVAILABLE_PUZZLES = PUZZLES.filter((p) => p.slug === "2x2" || p.slug === "
 export const Route = createFileRoute("/solver/$puzzle")({
   loader: ({ params }) => { if (params.puzzle !== "2x2" && params.puzzle !== "3x3") throw notFound(); const puzzle = getPuzzle(params.puzzle); if (!puzzle) throw notFound(); return { puzzle }; },
   head: ({ loaderData }) => { if (!loaderData) return { meta: [{ title: "Unavailable — RubikSolver" }, { name: "robots", content: "noindex" }] }; const { puzzle } = loaderData; const title = `${puzzle.slug} Rubik's Cube Solver — RubikSolver`; const description = puzzle.slug === "3x3" ? "Learn how to solve a 3x3 cube with RubikSolver's clear online solver and step-by-step turning instructions." : "Learn how to solve a 2x2 cube with RubikSolver's clear online solver and step-by-step turning instructions."; return { meta: [{ title }, { name: "description", content: description }, { property: "og:title", content: title }, { property: "og:description", content: description }] }; },
-  component: SolverPage,
+  component: SolverRouteComponent,
 });
+
+function SolverRouteComponent() {
+  const { puzzle } = Route.useLoaderData();
+  return <SolverPage puzzle={puzzle} />;
+}
 const PALETTE: ColorId[] = ["w", "y", "r", "o", "g", "b"];
 const SWATCH: Record<ColorId, string> = { w: "bg-cube-w", y: "bg-cube-y", r: "bg-cube-r", o: "bg-cube-o", g: "bg-cube-g", b: "bg-cube-b" };
 
-export function SolverPage({ puzzle: suppliedPuzzle }: { puzzle?: ReturnType<typeof getPuzzle> }) {
-  const routePuzzle = Route.useLoaderData().puzzle;
-  const puzzle = suppliedPuzzle ?? routePuzzle;
+export function SolverPage({ puzzle }: { puzzle: NonNullable<ReturnType<typeof getPuzzle>> }) {
   const n = puzzle.size;
   const [state, setState] = useState<CubeState>(() => solvedState(n));
   const [color, setColor] = useState<ColorId>("w");
