@@ -155,7 +155,7 @@ let solverReady = false;
 
 export async function init3x3Solver(): Promise<void> {
   if (solverReady) return;
-  const { default: Cube } = await import("cubejs");
+  const { Cube } = await import("@/lib/vendor/cubejs");
   Cube.initSolver();
   solverReady = true;
 }
@@ -164,7 +164,7 @@ export async function solve3x3(state: CubeState): Promise<string[]> {
   const err = validate3x3(state);
   if (err) throw new Error(err);
   await init3x3Solver();
-  const { default: Cube } = await import("cubejs");
+  const { Cube } = await import("@/lib/vendor/cubejs");
   const cube = Cube.fromString(toFaceletString(state));
   const alg: string = cube.solve();
   return alg.split(/\s+/).filter(Boolean);
