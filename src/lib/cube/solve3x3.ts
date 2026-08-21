@@ -1,100 +1,33 @@
 // 3x3x3 state validation + solving (Kociemba two-phase, via cubejs).
 
 import { COLOR_FACE, toFaceletString, type CubeState } from "./model";
+import { loadCube, type CubeStatic } from "@/lib/vendor/cubejs";
 
 const CORNERS: Array<[number, number][]> = [
-  [
-    [0, 8],
-    [1, 0],
-    [2, 2],
-  ], // URF
-  [
-    [0, 6],
-    [2, 0],
-    [4, 2],
-  ], // UFL
-  [
-    [0, 0],
-    [4, 0],
-    [5, 2],
-  ], // ULB
-  [
-    [0, 2],
-    [5, 0],
-    [1, 2],
-  ], // UBR
-  [
-    [3, 2],
-    [2, 8],
-    [1, 6],
-  ], // DFR
-  [
-    [3, 0],
-    [4, 8],
-    [2, 6],
-  ], // DLF
-  [
-    [3, 6],
-    [5, 8],
-    [4, 6],
-  ], // DBL
-  [
-    [3, 8],
-    [1, 8],
-    [5, 6],
-  ], // DRB
+  [[0, 8], [1, 0], [2, 2]],
+  [[0, 6], [2, 0], [4, 2]],
+  [[0, 0], [4, 0], [5, 2]],
+  [[0, 2], [5, 0], [1, 2]],
+  [[3, 2], [2, 8], [1, 6]],
+  [[3, 0], [4, 8], [2, 6]],
+  [[3, 6], [5, 8], [4, 6]],
+  [[3, 8], [1, 8], [5, 6]],
 ];
 const CORNER_NAMES = ["URF", "UFL", "ULB", "UBR", "DFR", "DLF", "DBL", "DRB"];
 
 const EDGES: Array<[number, number][]> = [
-  [
-    [0, 5],
-    [1, 1],
-  ], // UR
-  [
-    [0, 7],
-    [2, 1],
-  ], // UF
-  [
-    [0, 3],
-    [4, 1],
-  ], // UL
-  [
-    [0, 1],
-    [5, 1],
-  ], // UB
-  [
-    [3, 5],
-    [1, 7],
-  ], // DR
-  [
-    [3, 1],
-    [2, 7],
-  ], // DF
-  [
-    [3, 3],
-    [4, 7],
-  ], // DL
-  [
-    [3, 7],
-    [5, 7],
-  ], // DB
-  [
-    [2, 5],
-    [1, 3],
-  ], // FR
-  [
-    [2, 3],
-    [4, 5],
-  ], // FL
-  [
-    [5, 5],
-    [4, 3],
-  ], // BL
-  [
-    [5, 3],
-    [1, 5],
-  ], // BR
+  [[0, 5], [1, 1]],
+  [[0, 7], [2, 1]],
+  [[0, 3], [4, 1]],
+  [[0, 1], [5, 1]],
+  [[3, 5], [1, 7]],
+  [[3, 1], [2, 7]],
+  [[3, 3], [4, 7]],
+  [[3, 7], [5, 7]],
+  [[2, 5], [1, 3]],
+  [[2, 3], [4, 5]],
+  [[5, 5], [4, 3]],
+  [[5, 3], [1, 5]],
 ];
 const EDGE_NAMES = ["UR", "UF", "UL", "UB", "DR", "DF", "DL", "DB", "FR", "FL", "BL", "BR"];
 
@@ -152,19 +85,23 @@ export function validate3x3(state: CubeState): string | null {
 }
 
 let solverReady = false;
+let solverCube: CubeStatic | null = null;
 
-export async function init3x3Solver(): Promise<void> {
-  if (solverReady) return;
-  const { Cube } = await import("@/lib/vendor/cubejs");
+export async function init3x3Solver(): Promise<CubeStatic> {
+  if (solverReady && solverCube) return solverCube;
+
+  const Cube = await loadCube();
   Cube.initSolver();
+  solverCube = Cube;
   solverReady = true;
+  return Cube;
 }
 
 export async function solve3x3(state: CubeState): Promise<string[]> {
   const err = validate3x3(state);
   if (err) throw new Error(err);
-  await init3x3Solver();
-  const { Cube } = await import("@/lib/vendor/cubejs");
+
+  const Cube = await init3x3Solver();
   const cube = Cube.fromString(toFaceletString(state));
   const alg: string = cube.solve();
   return alg.split(/\s+/).filter(Boolean);
