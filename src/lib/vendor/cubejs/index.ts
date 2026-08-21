@@ -1,6 +1,6 @@
 // ESM entry for the vendored cubejs engine (Kociemba two-phase solver).
-import "./cube.js";
-import "./solve.js";
+// Load the two legacy scripts sequentially so the Cube global is guaranteed
+// to exist before solve.js reads it. This is especially important in web workers.
 
 export interface CubeInstance {
   move(alg: string): CubeInstance;
@@ -17,5 +17,24 @@ export interface CubeStatic {
   inverse(alg: string): string;
 }
 
-export const Cube = (globalThis as unknown as { Cube: CubeStatic }).Cube;
-export default Cube;
+let cubePromise: Promise<CubeStatic> | null = null;
+
+export function loadCube(): Promise<CubeStatic> {
+  if (!cubePromise) {
+    cubePromise = (async () => {
+      // cube.js creates globalThis.Cube.
+      await import("./cube.js");
+      // solve.js augments that Cube with the two-phase solver.
+      await import("./solve.js");
+
+      const Cube = (globalThis as unknown as { Cube?: CubeStatic }).Cube;
+      if (!Cube || typeof Cube.initSolver !== "function") {
+        throw new Error("The 3x3 solving engine failed to initialize.");
+      }
+      return Cube;
+    })();
+  }
+  return cubePromise;
+}
+
+export default loadCube;
