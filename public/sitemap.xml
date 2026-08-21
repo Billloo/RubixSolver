@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>/</loc></url><url><loc>/notation</loc></url><url><loc>/timer</loc></url><url><loc>/solver/2x2</loc></url><url><loc>/solver/3x3</loc></url>
+  <url><loc>/hi/</loc></url><url><loc>/hi/notation</loc></url><url><loc>/hi/timer</loc></url><url><loc>/hi/solver/2x2</loc></url><url><loc>/hi/solver/3x3</loc></url>
+  <url><loc>/zh/</loc></url><url><loc>/zh/notation</loc></url><url><loc>/zh/timer</loc></url><url><loc>/zh/solver/2x2</loc></url><url><loc>/zh/solver/3x3</loc></url>
+  <url><loc>/es/</loc></url><url><loc>/es/notation</loc></url><url><loc>/es/timer</loc></url><url><loc>/es/solver/2x2</loc></url><url><loc>/es/solver/3x3</loc></url>
+  <url><loc>/ar/</loc></url><url><loc>/ar/notation</loc></url><url><loc>/ar/timer</loc></url><url><loc>/ar/solver/2x2</loc></url><url><loc>/ar/solver/3x3</loc></url>
+  <url><loc>/pt/</loc></url><url><loc>/pt/notation</loc></url><url><loc>/pt/timer</loc></url><url><loc>/pt/solver/2x2</loc></url><url><loc>/pt/solver/3x3</loc></url>
+  <url><loc>/de/</loc></url><url><loc>/de/notation</loc></url><url><loc>/de/timer</loc></url><url><loc>/de/solver/2x2</loc></url><url><loc>/de/solver/3x3</loc></url>
+  <url><loc>/ru/</loc></url><url><loc>/ru/notation</loc></url><url><loc>/ru/timer</loc></url><url><loc>/ru/solver/2x2</loc></url><url><loc>/ru/solver/3x3</loc></url>
+  <url><loc>/fr/</loc></url><url><loc>/fr/notation</loc></url><url><loc>/fr/timer</loc></url><url><loc>/fr/solver/2x2</loc></url><url><loc>/fr/solver/3x3</loc></url>
+  <url><loc>/ja/</loc></url><url><loc>/ja/notation</loc></url><url><loc>/ja/timer</loc></url><url><loc>/ja/solver/2x2</loc></url><url><loc>/ja/solver/3x3</loc></url>
+</urlset>
