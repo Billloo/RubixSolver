@@ -238,7 +238,8 @@ function SolverPage() {
 
           {puzzle.solvable ? (
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button size="lg" onClick={handleSolve} disabled={busy || !!solution}>
+              {!solution && (
+              <Button size="lg" onClick={handleSolve} disabled={busy}>
                 {busy ? (
                   <>
                     <Loader2 className="size-4 animate-spin" /> Crunching…
@@ -249,6 +250,7 @@ function SolverPage() {
                   </>
                 )}
               </Button>
+              )}
               {solution && (
                 <Button variant="secondary" size="lg" onClick={() => reset(state)}>
                   Edit colors
