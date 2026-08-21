@@ -36,11 +36,11 @@ export function cloneState(state: CubeState): CubeState {
 }
 
 export function stateSize(state: CubeState): number {
-  return Math.round(Math.sqrt(state[0].length));
+  return Math.round(Math.sqrt(state[0]!.length));
 }
 
 export function isSolved(state: CubeState): boolean {
-  return state.every((face) => face.every((c) => c === face[0]));
+  return state.every((face) => face.every((c) => c === face[0]!));
 }
 
 const U = 0,
@@ -53,29 +53,29 @@ const U = 0,
 function rotateFaceCW(face: ColorId[], n: number): ColorId[] {
   const out = face.slice();
   for (let r = 0; r < n; r++)
-    for (let c = 0; c < n; c++) out[c * n + (n - 1 - r)] = face[r * n + c];
+    for (let c = 0; c < n; c++) out[c * n + (n - 1 - r)] = face[r * n + c]!;
   return out;
 }
 
 function rotateFaceCCW(face: ColorId[], n: number): ColorId[] {
   const out = face.slice();
   for (let r = 0; r < n; r++)
-    for (let c = 0; c < n; c++) out[(n - 1 - c) * n + r] = face[r * n + c];
+    for (let c = 0; c < n; c++) out[(n - 1 - c) * n + r] = face[r * n + c]!;
   return out;
 }
 
 const row = (s: CubeState, f: number, r: number, n: number): ColorId[] =>
-  s[f].slice(r * n, r * n + n);
+  s[f]!.slice(r * n, r * n + n);
 const setRow = (s: CubeState, f: number, r: number, n: number, v: ColorId[]) => {
-  for (let i = 0; i < n; i++) s[f][r * n + i] = v[i];
+  for (let i = 0; i < n; i++) s[f]![r * n + i] = v[i]!;
 };
 const col = (s: CubeState, f: number, c: number, n: number): ColorId[] => {
   const out: ColorId[] = [];
-  for (let i = 0; i < n; i++) out.push(s[f][i * n + c]);
+  for (let i = 0; i < n; i++) out.push(s[f]![i * n + c]!);
   return out;
 };
 const setCol = (s: CubeState, f: number, c: number, n: number, v: ColorId[]) => {
-  for (let i = 0; i < n; i++) s[f][i * n + c] = v[i];
+  for (let i = 0; i < n; i++) s[f]![i * n + c] = v[i]!;
 };
 const rev = (a: ColorId[]) => a.slice().reverse();
 
@@ -85,7 +85,7 @@ function quarterTurn(state: CubeState, face: FaceKey, layer: number): CubeState 
   const s = cloneState(state);
 
   const rotateOuter = (f: number, cw: boolean) => {
-    s[f] = cw ? rotateFaceCW(s[f], n) : rotateFaceCCW(s[f], n);
+    s[f] = cw ? rotateFaceCW(s[f]!, n) : rotateFaceCCW(s[f]!, n);
   };
 
   if (face === "U") {
@@ -200,11 +200,11 @@ export function randomScramble(n: number, length = n * n * 3): Move[] {
   const out: Move[] = [];
   let last = "";
   while (out.length < length) {
-    const face = faces[Math.floor(Math.random() * 6)];
+    const face = faces[Math.floor(Math.random() * 6)]!;
     if (face === last) continue;
     last = face;
     const width = n > 3 && Math.random() < 0.35 ? 2 : 1;
-    const amount = ([1, 2, 3] as const)[Math.floor(Math.random() * 3)];
+    const amount = ([1, 2, 3] as const)[Math.floor(Math.random() * 3)]!;
     out.push({ face, width, amount });
   }
   return out;
