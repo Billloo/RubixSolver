@@ -43,7 +43,7 @@ function Index() {
               sequence of moves!
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Button size="lg" asChild>
+              <Button size="lg" variant="secondary" asChild>
                 <Link to="/solver/$puzzle" params={{ puzzle: "3x3" }}>
                   Solve a 3x3
                 </Link>
