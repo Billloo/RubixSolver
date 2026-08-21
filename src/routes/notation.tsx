@@ -44,11 +44,12 @@ const faceTransforms: Record<Face, string> = {
 };
 
 const faceNames: Record<Face, string> = { R: "R", L: "L", U: "U", D: "D", F: "F", B: "B" };
+const faceLabels: Record<Face, string> = { R: "RIGHT", L: "LEFT", U: "TOP", D: "BOTTOM", F: "FRONT", B: "BACK" };
 
 function CubeFace({ face, highlighted }: { face: Face; highlighted: boolean }) {
   return (
     <div
-      className={`absolute left-1/2 top-1/2 grid h-[120px] w-[120px] -translate-x-1/2 -translate-y-1/2 grid-cols-3 gap-1 rounded-lg border-2 p-1.5 ${highlighted ? "border-primary bg-primary/20 shadow-[0_0_24px_hsl(var(--primary)/0.35)]" : "border-border bg-muted/80"}`}
+      className={`absolute left-1/2 top-1/2 grid h-[126px] w-[126px] -translate-x-1/2 -translate-y-1/2 grid-cols-3 gap-1 rounded-lg border-2 p-1.5 ${highlighted ? "border-primary bg-primary/20 shadow-[0_0_28px_hsl(var(--primary)/0.45)]" : "border-border bg-muted/80"}`}
       style={{ transform: `translate(-50%, -50%) ${faceTransforms[face]}` }}
     >
       {Array.from({ length: 9 }).map((_, i) => (
@@ -59,31 +60,63 @@ function CubeFace({ face, highlighted }: { face: Face; highlighted: boolean }) {
   );
 }
 
+function MoveArrow({ face, prime, double }: { face: Face; prime: boolean; double: boolean }) {
+  // The arrow is intentionally drawn over the cube rather than in the corner so viewers
+  // can immediately associate its direction with the highlighted face.
+  const rotation: Record<Face, number> = { F: 0, B: 180, R: 90, L: -90, U: 0, D: 180 };
+  const base = prime ? -1 : 1;
+  const turns = double ? 2 : 1;
+  const arrowRotation = rotation[face] + (base * turns * 90);
+
+  return (
+    <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+      <div className="relative h-[170px] w-[170px]" style={{ transform: `rotate(${rotation[face]}deg)` }}>
+        <svg viewBox="0 0 180 180" className="absolute inset-0 h-full w-full overflow-visible drop-shadow-md" aria-hidden="true">
+          <defs>
+            <marker id={`arrow-${face}-${prime}-${double}`} markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+              <path d="M0,0 L9,4.5 L0,9 Z" fill="currentColor" />
+            </marker>
+          </defs>
+          <path
+            d={double ? "M 90 18 A 72 72 0 1 1 90 162" : "M 90 18 A 72 72 0 0 1 145 45"}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="8"
+            strokeLinecap="round"
+            markerEnd={`url(#arrow-${face}-${prime}-${double})`}
+            className={`text-primary ${prime ? "[transform:scaleX(-1)] [transform-origin:center]" : ""}`}
+          />
+        </svg>
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/30 bg-background/90 p-2 text-primary shadow-lg">
+          {double ? <RotateCw className="size-6" /> : prime ? <RotateCcw className="size-6" /> : <RotateCw className="size-6" />}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MoveDiagram({ move }: { move: string }) {
   const face = move[0] as Face;
   const prime = move.includes("'");
   const double = move.includes("2");
-  const turn = double ? 180 : 90;
 
   return (
-    <div className="relative h-64 overflow-hidden rounded-xl border border-border bg-gradient-to-br from-background via-surface-2 to-muted [perspective:900px]">
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 [transform-style:preserve-3d]">
-        <div className="relative h-[120px] w-[120px] [transform-style:preserve-3d]" style={{ transform: "rotateX(-24deg) rotateY(-38deg)" }}>
+    <div className="relative h-[310px] overflow-hidden rounded-xl border border-border bg-gradient-to-br from-background via-surface-2 to-muted [perspective:1000px]">
+      <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 [transform-style:preserve-3d]">
+        <div className="relative h-[126px] w-[126px] [transform-style:preserve-3d]" style={{ transform: "rotateX(-24deg) rotateY(-38deg)" }}>
           {(["F", "B", "R", "L", "U", "D"] as Face[]).map((cubeFace) => (
             <CubeFace key={cubeFace} face={cubeFace} highlighted={cubeFace === face} />
           ))}
         </div>
       </div>
 
-      <div className="absolute left-3 top-3 rounded-md border border-border bg-background/90 px-2.5 py-1 text-xs font-semibold tracking-wider text-muted-foreground">
-        {face === "F" ? "FRONT" : face === "B" ? "BACK" : face === "R" ? "RIGHT" : face === "L" ? "LEFT" : face === "U" ? "TOP" : "BOTTOM"}
+      <MoveArrow face={face} prime={prime} double={double} />
+
+      <div className="absolute left-3 top-3 z-20 rounded-md border border-border bg-background/95 px-2.5 py-1 text-xs font-semibold tracking-wider text-muted-foreground">
+        TURN THE <span className="text-primary">{faceLabels[face]}</span> FACE
       </div>
 
-      <div className="absolute right-3 top-3 rounded-full border border-primary/30 bg-background/95 p-2 text-primary shadow-md">
-        {double ? <RotateCw className="size-7" style={{ transform: "rotate(90deg)" }} /> : prime ? <RotateCcw className="size-7" /> : <RotateCw className="size-7" />}
-      </div>
-
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full border border-border bg-background/95 px-4 py-1.5 font-display text-xl font-semibold shadow-sm">
+      <div className="absolute bottom-3 left-1/2 z-20 -translate-x-1/2 rounded-full border border-border bg-background/95 px-5 py-1.5 font-display text-xl font-semibold shadow-md">
         {move}
       </div>
     </div>
@@ -97,7 +130,7 @@ function NotationPage() {
       <header className="mt-8 max-w-3xl">
         <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">Learn the language</p>
         <h1 className="mt-2 text-4xl font-semibold sm:text-5xl">Rubik's Cube Move Notation</h1>
-        <p className="mt-4 text-lg text-muted-foreground">Every move tells you which face to turn and how far. The 3D diagrams highlight the exact face being turned, including the left, right, top, bottom, front, and back faces.</p>
+        <p className="mt-4 text-lg text-muted-foreground">Every move tells you which face to turn and how far. The cube is centered in every diagram, the turned face is highlighted, and the curved arrow shows the direction of the move.</p>
       </header>
 
       <section className="mt-10 panel p-6 sm:p-8">
