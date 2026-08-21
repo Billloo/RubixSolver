@@ -125,7 +125,7 @@ function RootComponent() {
         <header className="sticky top-0 z-20 border-b border-border/70 bg-background/85 backdrop-blur">
           <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
             <Link to="/" className="font-display text-lg font-semibold tracking-tight">
-              Cube<span className="text-primary">lab</span>
+              Rubix<span className="text-primary">Solver</span>
             </Link>
             <nav className="flex items-center gap-1 text-sm">
               {["2x2", "3x3", "4x4", "5x5"].map((slug) => (
