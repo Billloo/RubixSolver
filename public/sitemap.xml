@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>/</loc></url><url><loc>/notation</loc></url><url><loc>/timer</loc></url><url><loc>/solver/2x2</loc></url><url><loc>/solver/3x3</loc></url>
-  <url><loc>/hi/</loc></url><url><loc>/hi/notation</loc></url><url><loc>/hi/timer</loc></url><url><loc>/hi/solver/2x2</loc></url><url><loc>/hi/solver/3x3</loc></url>
-  <url><loc>/zh/</loc></url><url><loc>/zh/notation</loc></url><url><loc>/zh/timer</loc></url><url><loc>/zh/solver/2x2</loc></url><url><loc>/zh/solver/3x3</loc></url>
-  <url><loc>/es/</loc></url><url><loc>/es/notation</loc></url><url><loc>/es/timer</loc></url><url><loc>/es/solver/2x2</loc></url><url><loc>/es/solver/3x3</loc></url>
-  <url><loc>/ar/</loc></url><url><loc>/ar/notation</loc></url><url><loc>/ar/timer</loc></url><url><loc>/ar/solver/2x2</loc></url><url><loc>/ar/solver/3x3</loc></url>
-  <url><loc>/pt/</loc></url><url><loc>/pt/notation</loc></url><url><loc>/pt/timer</loc></url><url><loc>/pt/solver/2x2</loc></url><url><loc>/pt/solver/3x3</loc></url>
-  <url><loc>/de/</loc></url><url><loc>/de/notation</loc></url><url><loc>/de/timer</loc></url><url><loc>/de/solver/2x2</loc></url><url><loc>/de/solver/3x3</loc></url>
-  <url><loc>/ru/</loc></url><url><loc>/ru/notation</loc></url><url><loc>/ru/timer</loc></url><url><loc>/ru/solver/2x2</loc></url><url><loc>/ru/solver/3x3</loc></url>
-  <url><loc>/fr/</loc></url><url><loc>/fr/notation</loc></url><url><loc>/fr/timer</loc></url><url><loc>/fr/solver/2x2</loc></url><url><loc>/fr/solver/3x3</loc></url>
-  <url><loc>/ja/</loc></url><url><loc>/ja/notation</loc></url><url><loc>/ja/timer</loc></url><url><loc>/ja/solver/2x2</loc></url><url><loc>/ja/solver/3x3</loc></url>
+  <url><loc>https://rubiksolver.pro/</loc></url><url><loc>https://rubiksolver.pro/notation</loc></url><url><loc>https://rubiksolver.pro/timer</loc></url><url><loc>https://rubiksolver.pro/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/solver/3x3</loc></url>
+  <url><loc>https://rubiksolver.pro/hi/</loc></url><url><loc>https://rubiksolver.pro/hi/notation</loc></url><url><loc>https://rubiksolver.pro/hi/timer</loc></url><url><loc>https://rubiksolver.pro/hi/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/hi/solver/3x3</loc></url>
+  <url><loc>https://rubiksolver.pro/zh/</loc></url><url><loc>https://rubiksolver.pro/zh/notation</loc></url><url><loc>https://rubiksolver.pro/zh/timer</loc></url><url><loc>https://rubiksolver.pro/zh/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/zh/solver/3x3</loc></url>
+  <url><loc>https://rubiksolver.pro/es/</loc></url><url><loc>https://rubiksolver.pro/es/notation</loc></url><url><loc>https://rubiksolver.pro/es/timer</loc></url><url><loc>https://rubiksolver.pro/es/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/es/solver/3x3</loc></url>
+  <url><loc>https://rubiksolver.pro/ar/</loc></url><url><loc>https://rubiksolver.pro/ar/notation</loc></url><url><loc>https://rubiksolver.pro/ar/timer</loc></url><url><loc>https://rubiksolver.pro/ar/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/ar/solver/3x3</loc></url>
+  <url><loc>https://rubiksolver.pro/pt/</loc></url><url><loc>https://rubiksolver.pro/pt/notation</loc></url><url><loc>https://rubiksolver.pro/pt/timer</loc></url><url><loc>https://rubiksolver.pro/pt/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/pt/solver/3x3</loc></url>
+  <url><loc>https://rubiksolver.pro/de/</loc></url><url><loc>https://rubiksolver.pro/de/notation</loc></url><url><loc>https://rubiksolver.pro/de/timer</loc></url><url><loc>https://rubiksolver.pro/de/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/de/solver/3x3</loc></url>
+  <url><loc>https://rubiksolver.pro/ru/</loc></url><url><loc>https://rubiksolver.pro/ru/notation</loc></url><url><loc>https://rubiksolver.pro/ru/timer</loc></url><url><loc>https://rubiksolver.pro/ru/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/ru/solver/3x3</loc></url>
+  <url><loc>https://rubiksolver.pro/fr/</loc></url><url><loc>https://rubiksolver.pro/fr/notation</loc></url><url><loc>https://rubiksolver.pro/fr/timer</loc></url><url><loc>https://rubiksolver.pro/fr/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/fr/solver/3x3</loc></url>
+  <url><loc>https://rubiksolver.pro/ja/</loc></url><url><loc>https://rubiksolver.pro/ja/notation</loc></url><url><loc>https://rubiksolver.pro/ja/timer</loc></url><url><loc>https://rubiksolver.pro/ja/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/ja/solver/3x3</loc></url>
 </urlset>
