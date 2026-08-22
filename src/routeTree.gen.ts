@@ -15,37 +15,23 @@ import { Route as TimerRouteImport } from './routes/timer'
 import { Route as LangIndexRouteImport } from './routes/$lang.index'
 import { Route as LangSplatRouteImport } from './routes/$lang.$'
 import { Route as SolverPuzzleRouteImport } from './routes/solver.$puzzle'
+import { Route as AlgorithmsRouteImport } from './routes/algorithms'
+import { Route as AlgorithmsF2lRouteImport } from './routes/algorithms/f2l'
+import { Route as CfopRouteImport } from './routes/guides/what-is-cfop'
+import { Route as BeginnerGuideRouteImport } from './routes/learn/how-to-solve-a-rubiks-cube'
+import { Route as ScrambleGeneratorRouteImport } from './routes/scramble-generator'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotationRoute = NotationRouteImport.update({
-  id: '/notation',
-  path: '/notation',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TimerRoute = TimerRouteImport.update({
-  id: '/timer',
-  path: '/timer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LangIndexRoute = LangIndexRouteImport.update({
-  id: '/$lang/',
-  path: '/$lang/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LangSplatRoute = LangSplatRouteImport.update({
-  id: '/$lang/$',
-  path: '/$lang/$',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SolverPuzzleRoute = SolverPuzzleRouteImport.update({
-  id: '/solver/$puzzle',
-  path: '/solver/$puzzle',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const IndexRoute = IndexRouteImport.update({ id: '/', path: '/', getParentRoute: () => rootRouteImport } as any)
+const NotationRoute = NotationRouteImport.update({ id: '/notation', path: '/notation', getParentRoute: () => rootRouteImport } as any)
+const TimerRoute = TimerRouteImport.update({ id: '/timer', path: '/timer', getParentRoute: () => rootRouteImport } as any)
+const LangIndexRoute = LangIndexRouteImport.update({ id: '/$lang/', path: '/$lang/', getParentRoute: () => rootRouteImport } as any)
+const LangSplatRoute = LangSplatRouteImport.update({ id: '/$lang/$', path: '/$lang/$', getParentRoute: () => rootRouteImport } as any)
+const SolverPuzzleRoute = SolverPuzzleRouteImport.update({ id: '/solver/$puzzle', path: '/solver/$puzzle', getParentRoute: () => rootRouteImport } as any)
+const AlgorithmsRoute = AlgorithmsRouteImport.update({ id: '/algorithms', path: '/algorithms', getParentRoute: () => rootRouteImport } as any)
+const AlgorithmsF2lRoute = AlgorithmsF2lRouteImport.update({ id: '/algorithms/f2l', path: '/algorithms/f2l', getParentRoute: () => rootRouteImport } as any)
+const CfopRoute = CfopRouteImport.update({ id: '/guides/what-is-cfop', path: '/guides/what-is-cfop', getParentRoute: () => rootRouteImport } as any)
+const BeginnerGuideRoute = BeginnerGuideRouteImport.update({ id: '/learn/how-to-solve-a-rubiks-cube', path: '/learn/how-to-solve-a-rubiks-cube', getParentRoute: () => rootRouteImport } as any)
+const ScrambleGeneratorRoute = ScrambleGeneratorRouteImport.update({ id: '/scramble-generator', path: '/scramble-generator', getParentRoute: () => rootRouteImport } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +40,11 @@ export interface FileRoutesByFullPath {
   '/$lang/$': typeof LangSplatRoute
   '/solver/$puzzle': typeof SolverPuzzleRoute
   '/$lang/': typeof LangIndexRoute
+  '/algorithms': typeof AlgorithmsRoute
+  '/algorithms/f2l': typeof AlgorithmsF2lRoute
+  '/guides/what-is-cfop': typeof CfopRoute
+  '/learn/how-to-solve-a-rubiks-cube': typeof BeginnerGuideRoute
+  '/scramble-generator': typeof ScrambleGeneratorRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +53,11 @@ export interface FileRoutesByTo {
   '/$lang/$': typeof LangSplatRoute
   '/solver/$puzzle': typeof SolverPuzzleRoute
   '/$lang': typeof LangIndexRoute
+  '/algorithms': typeof AlgorithmsRoute
+  '/algorithms/f2l': typeof AlgorithmsF2lRoute
+  '/guides/what-is-cfop': typeof CfopRoute
+  '/learn/how-to-solve-a-rubiks-cube': typeof BeginnerGuideRoute
+  '/scramble-generator': typeof ScrambleGeneratorRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,21 +67,18 @@ export interface FileRoutesById {
   '/$lang/$': typeof LangSplatRoute
   '/solver/$puzzle': typeof SolverPuzzleRoute
   '/$lang/': typeof LangIndexRoute
+  '/algorithms': typeof AlgorithmsRoute
+  '/algorithms/f2l': typeof AlgorithmsF2lRoute
+  '/guides/what-is-cfop': typeof CfopRoute
+  '/learn/how-to-solve-a-rubiks-cube': typeof BeginnerGuideRoute
+  '/scramble-generator': typeof ScrambleGeneratorRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    '/' | '/notation' | '/timer' | '/$lang/$' | '/solver/$puzzle' | '/$lang/'
+  fullPaths: '/' | '/notation' | '/timer' | '/$lang/$' | '/solver/$puzzle' | '/$lang/' | '/algorithms' | '/algorithms/f2l' | '/guides/what-is-cfop' | '/learn/how-to-solve-a-rubiks-cube' | '/scramble-generator'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/notation' | '/timer' | '/$lang/$' | '/solver/$puzzle' | '/$lang'
-  id:
-    | '__root__'
-    | '/'
-    | '/notation'
-    | '/timer'
-    | '/$lang/$'
-    | '/solver/$puzzle'
-    | '/$lang/'
+  to: '/' | '/notation' | '/timer' | '/$lang/$' | '/solver/$puzzle' | '/$lang' | '/algorithms' | '/algorithms/f2l' | '/guides/what-is-cfop' | '/learn/how-to-solve-a-rubiks-cube' | '/scramble-generator'
+  id: '__root__' | '/' | '/notation' | '/timer' | '/$lang/$' | '/solver/$puzzle' | '/$lang/' | '/algorithms' | '/algorithms/f2l' | '/guides/what-is-cfop' | '/learn/how-to-solve-a-rubiks-cube' | '/scramble-generator'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -95,66 +88,34 @@ export interface RootRouteChildren {
   LangSplatRoute: typeof LangSplatRoute
   SolverPuzzleRoute: typeof SolverPuzzleRoute
   LangIndexRoute: typeof LangIndexRoute
+  AlgorithmsRoute: typeof AlgorithmsRoute
+  AlgorithmsF2lRoute: typeof AlgorithmsF2lRoute
+  CfopRoute: typeof CfopRoute
+  BeginnerGuideRoute: typeof BeginnerGuideRoute
+  ScrambleGeneratorRoute: typeof ScrambleGeneratorRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notation': {
-      id: '/notation'
-      path: '/notation'
-      fullPath: '/notation'
-      preLoaderRoute: typeof NotationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/timer': {
-      id: '/timer'
-      path: '/timer'
-      fullPath: '/timer'
-      preLoaderRoute: typeof TimerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/$lang/': {
-      id: '/$lang/'
-      path: '/$lang'
-      fullPath: '/$lang/'
-      preLoaderRoute: typeof LangIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/$lang/$': {
-      id: '/$lang/$'
-      path: '/$lang/$'
-      fullPath: '/$lang/$'
-      preLoaderRoute: typeof LangSplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/solver/$puzzle': {
-      id: '/solver/$puzzle'
-      path: '/solver/$puzzle'
-      fullPath: '/solver/$puzzle'
-      preLoaderRoute: typeof SolverPuzzleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+    '/': { id: '/'; path: '/'; fullPath: '/'; preLoaderRoute: typeof IndexRouteImport; parentRoute: typeof rootRouteImport }
+    '/notation': { id: '/notation'; path: '/notation'; fullPath: '/notation'; preLoaderRoute: typeof NotationRouteImport; parentRoute: typeof rootRouteImport }
+    '/timer': { id: '/timer'; path: '/timer'; fullPath: '/timer'; preLoaderRoute: typeof TimerRouteImport; parentRoute: typeof rootRouteImport }
+    '/$lang/': { id: '/$lang/'; path: '/$lang'; fullPath: '/$lang/'; preLoaderRoute: typeof LangIndexRouteImport; parentRoute: typeof rootRouteImport }
+    '/$lang/$': { id: '/$lang/$'; path: '/$lang/$'; fullPath: '/$lang/$'; preLoaderRoute: typeof LangSplatRouteImport; parentRoute: typeof rootRouteImport }
+    '/solver/$puzzle': { id: '/solver/$puzzle'; path: '/solver/$puzzle'; fullPath: '/solver/$puzzle'; preLoaderRoute: typeof SolverPuzzleRouteImport; parentRoute: typeof rootRouteImport }
+    '/algorithms': { id: '/algorithms'; path: '/algorithms'; fullPath: '/algorithms'; preLoaderRoute: typeof AlgorithmsRouteImport; parentRoute: typeof rootRouteImport }
+    '/algorithms/f2l': { id: '/algorithms/f2l'; path: '/algorithms/f2l'; fullPath: '/algorithms/f2l'; preLoaderRoute: typeof AlgorithmsF2lRouteImport; parentRoute: typeof rootRouteImport }
+    '/guides/what-is-cfop': { id: '/guides/what-is-cfop'; path: '/guides/what-is-cfop'; fullPath: '/guides/what-is-cfop'; preLoaderRoute: typeof CfopRouteImport; parentRoute: typeof rootRouteImport }
+    '/learn/how-to-solve-a-rubiks-cube': { id: '/learn/how-to-solve-a-rubiks-cube'; path: '/learn/how-to-solve-a-rubiks-cube'; fullPath: '/learn/how-to-solve-a-rubiks-cube'; preLoaderRoute: typeof BeginnerGuideRouteImport; parentRoute: typeof rootRouteImport }
+    '/scramble-generator': { id: '/scramble-generator'; path: '/scramble-generator'; fullPath: '/scramble-generator'; preLoaderRoute: typeof ScrambleGeneratorRouteImport; parentRoute: typeof rootRouteImport }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  NotationRoute: NotationRoute,
-  TimerRoute: TimerRoute,
-  LangSplatRoute: LangSplatRoute,
-  SolverPuzzleRoute: SolverPuzzleRoute,
-  LangIndexRoute: LangIndexRoute,
+  IndexRoute, NotationRoute, TimerRoute, LangSplatRoute, SolverPuzzleRoute, LangIndexRoute,
+  AlgorithmsRoute, AlgorithmsF2lRoute, CfopRoute, BeginnerGuideRoute, ScrambleGeneratorRoute,
 }
-export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren)._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
 import type { startInstance } from './start.ts'
