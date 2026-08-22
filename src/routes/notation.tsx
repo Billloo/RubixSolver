@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, RotateCcw, RotateCw } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { CubeMove3D } from "@/components/CubeMove3D";
 import { useState } from "react";
 
 export const Route = createFileRoute("/notation")({
@@ -44,51 +45,13 @@ const moves: Move[] = [
   ["B2", "Back", "double", "Turn the back face 180°."],
 ].map(([notation, face, direction, description]) => ({ notation, face, direction, description })) as Move[];
 
-const faceClass: Record<string, string> = {
-  Front: "bg-cube-f",
-  Right: "bg-cube-r",
-  Left: "bg-cube-l",
-  Up: "bg-cube-u",
-  Down: "bg-cube-d",
-  Back: "bg-cube-b",
-};
-
-function CubeDiagram({ move }: { move: Move }) {
-  const arrowClass =
-    move.direction === "counterclockwise"
-      ? "rotate-180"
-      : move.direction === "double"
-        ? "rotate-90"
-        : "";
-
+function CubeDiagram({ move, size = "md" }: { move: Move; size?: "md" | "sm" }) {
   return (
-    <div className="relative flex min-h-[250px] items-center justify-center overflow-hidden rounded-2xl border border-border bg-surface-2 p-6">
+    <div className="relative flex min-h-[230px] items-center justify-center overflow-hidden rounded-2xl border border-border bg-surface-2 p-4">
       <div className="absolute left-4 top-4 rounded-full border border-border bg-background/90 px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm">
         {move.face} face
       </div>
-
-      <div className="relative mt-5 h-36 w-36 sm:h-40 sm:w-40">
-        <div className="absolute left-1/2 top-0 grid h-24 w-24 -translate-x-1/2 -skew-x-12 -skew-y-6 grid-cols-3 gap-1 rounded-lg border-2 border-foreground/20 bg-cube-u p-1 shadow-md">
-          {Array.from({ length: 9 }).map((_, i) => (
-            <span key={i} className="rounded-sm border border-black/10 bg-white/20" />
-          ))}
-        </div>
-        <div className="absolute bottom-0 left-0 grid h-24 w-24 skew-y-6 grid-cols-3 gap-1 rounded-lg border-2 border-foreground/20 bg-cube-l p-1 shadow-md">
-          {Array.from({ length: 9 }).map((_, i) => (
-            <span key={i} className="rounded-sm border border-black/10 bg-white/20" />
-          ))}
-        </div>
-        <div className={`absolute bottom-0 right-0 grid h-24 w-24 -skew-y-6 grid-cols-3 gap-1 rounded-lg border-2 border-foreground/20 p-1 shadow-md ${faceClass[move.face]}`}>
-          {Array.from({ length: 9 }).map((_, i) => (
-            <span key={i} className="rounded-sm border border-black/10 bg-white/20" />
-          ))}
-        </div>
-
-        <div className={`absolute -right-7 bottom-7 flex size-14 items-center justify-center rounded-full border-2 border-primary bg-background/95 text-primary shadow-lg transition-transform duration-300 ${arrowClass}`}>
-          {move.direction === "counterclockwise" ? <RotateCcw className="size-7" /> : <RotateCw className="size-7" />}
-        </div>
-      </div>
-
+      <CubeMove3D notation={move.notation} className={size === "sm" ? "scale-90" : ""} />
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 text-xs font-medium shadow-sm">
         {move.direction === "double" ? "180° turn" : move.direction === "clockwise" ? "90° clockwise" : "90° counterclockwise"}
       </div>
@@ -164,7 +127,7 @@ export function NotationPage({ homeHref = "/" }: { homeHref?: string }) {
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {moves.map((move) => (
             <article key={move.notation} className="rounded-xl border border-border bg-background/50 p-4">
-              <CubeDiagram move={move} />
+              <CubeDiagram move={move} size="sm" />
               <div className="mt-5 flex items-center justify-between gap-3">
                 <h3 className="font-display text-xl font-semibold">{move.notation}</h3>
                 <span className="text-xs font-medium text-muted-foreground">{move.face} face</span>
