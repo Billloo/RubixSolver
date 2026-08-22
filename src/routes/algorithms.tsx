@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/algorithms")({
   head: () => ({ meta: [{ title: "Rubik's Cube Algorithms – Beginner & CFOP Guide | RubikSolver" }, { name: "description", content: "Learn Rubik's Cube algorithms for beginners and speedcubers, including the sexy move, sledgehammer, F2L, OLL, PLL, and CFOP." }] }),
@@ -13,6 +13,13 @@ const algorithms = [
 ] as const;
 
 function AlgorithmsPage() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const isAlgorithmDetail = pathname === "/algorithms/f2l" || pathname === "/algorithms/oll" || pathname === "/algorithms/pll";
+
+  if (isAlgorithmDetail) {
+    return <Outlet />;
+  }
+
   return <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6 sm:py-14">
     <a href="/" className="text-sm text-muted-foreground hover:text-foreground">← Home</a>
     <header className="mt-8"><p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">Solve faster</p><h1 className="mt-2 text-4xl font-semibold sm:text-5xl">Rubik's Cube Algorithms</h1><p className="mt-4 max-w-3xl text-lg text-muted-foreground">Explore common Rubik's Cube algorithms for beginners and speedcubers. Start with essential sequences, then learn F2L, OLL, and PLL as you progress through CFOP.</p></header>
