@@ -1,0 +1,13 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+
+export const Route = createFileRoute("/scramble-generator")({
+  head: () => ({ meta: [{ title: "Rubik's Cube Scramble Generator – Free 3x3 Scrambles | RubikSolver" }, { name: "description", content: "Generate free 3x3 Rubik's Cube scrambles online and use them to practice with the RubikSolver timer." }] }),
+  component: ScramblePage,
+});
+
+const faces = ["R", "L", "U", "D", "F", "B"] as const;
+const suffixes = ["", "'", "2"] as const;
+function makeScramble() { const out: string[] = []; let last = ""; while (out.length < 20) { const face = faces[Math.floor(Math.random() * faces.length)]!; if (face === last) continue; out.push(face + suffixes[Math.floor(Math.random() * suffixes.length)]!); last = face; } return out.join(" "); }
+
+function ScramblePage() { const [scramble, setScramble] = useState(makeScramble); return <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6 sm:py-14"><Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Home</Link><header className="mt-8"><p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">Practice tool</p><h1 className="mt-2 text-4xl font-semibold sm:text-5xl">Rubik's Cube Scramble Generator</h1><p className="mt-4 text-lg text-muted-foreground">Generate a new 3×3 Rubik's Cube scramble whenever you want to practice. Each scramble uses standard face-turn notation.</p></header><section className="mt-10 panel p-6 text-center sm:p-10"><p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">3×3 scramble</p><div className="mt-6 rounded-xl border border-border bg-surface-2 px-4 py-8 font-mono text-lg leading-8 sm:text-2xl">{scramble}</div><button onClick={() => setScramble(makeScramble())} className="mt-6 rounded-lg bg-primary px-5 py-3 font-medium text-primary-foreground">Generate Scramble</button></section><section className="mt-8 grid gap-5 md:grid-cols-2"><div className="panel p-6"><h2 className="text-xl font-semibold">Start a timed solve</h2><p className="mt-2 text-sm text-muted-foreground">Use a generated scramble, then track your time, averages, best solve, worst solve, and Ao5.</p><Link to="/timer" className="mt-4 inline-flex text-sm font-medium text-primary underline">Open Rubik's Cube Timer →</Link></div><div className="panel p-6"><h2 className="text-xl font-semibold">Learn the notation</h2><p className="mt-2 text-sm text-muted-foreground">Not sure what R, U2, or F' means? Learn the notation used in every scramble and solver solution.</p><Link to="/notation" className="mt-4 inline-flex text-sm font-medium text-primary underline">Read the notation guide →</Link></div></section></div> }
