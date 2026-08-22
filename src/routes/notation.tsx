@@ -45,8 +45,17 @@ const moves: Move[] = [
   ["B2", "Back", "double", "Turn the back face 180°."],
 ].map(([notation, face, direction, description]) => ({ notation, face, direction, description })) as Move[];
 
-function CubeDiagram({ move, size = "md" }: { move: Move; size?: "md" | "sm" }) {
+function CubeDiagram({
+  move,
+  size = "md",
+  autoPlay = false,
+}: {
+  move: Move;
+  size?: "md" | "sm";
+  autoPlay?: boolean;
+}) {
   const [hovered, setHovered] = useState(false);
+  const shouldPlay = autoPlay || hovered;
 
   return (
     <div
@@ -59,7 +68,7 @@ function CubeDiagram({ move, size = "md" }: { move: Move; size?: "md" | "sm" }) 
       <div className="absolute left-4 top-4 rounded-full border border-border bg-background/90 px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm">
         {move.face} face
       </div>
-      <CubeMove3D notation={move.notation} className={size === "sm" ? "scale-90" : ""} autoPlay={hovered} />
+      <CubeMove3D notation={move.notation} className={size === "sm" ? "scale-90" : ""} autoPlay={shouldPlay} />
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 text-xs font-medium shadow-sm">
         {move.direction === "double" ? "180° turn" : move.direction === "clockwise" ? "90° clockwise" : "90° counterclockwise"}
       </div>
