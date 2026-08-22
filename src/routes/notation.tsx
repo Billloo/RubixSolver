@@ -97,7 +97,7 @@ function CubeDiagram({ move }: { move: Move }) {
 }
 
 function InteractiveMoveGuide() {
-  const [selected, setSelected] = useState<Move>(moves[0]);
+  const [selected, setSelected] = useState<Move>(moves[0]!);
 
   return (
     <section className="mt-10 overflow-hidden rounded-2xl border border-border bg-surface-2 p-5 sm:p-8">

@@ -42,9 +42,9 @@ function RootComponent() {
   const href = (path: string) => localized ? `/${lang}/${path}` : `/${path}`;
   const homeHref = localized ? `/${lang}/` : "/";
   const onHomePage = (localized && parts.length === 1) || (!localized && parts.length === 0);
-  const alternateLinks = LANGUAGES.map(language => ({
+  const alternateLinks: { rel: string; hrefLang: string; href: string }[] = LANGUAGES.map(language => ({
     rel: "alternate",
-    hrefLang: language.code,
+    hrefLang: language.code as string,
     href: `${SITE_URL}${getLocalizedPath(pathname, language.code)}`,
   }));
   alternateLinks.push({ rel: "alternate", hrefLang: "x-default", href: `${SITE_URL}${getLocalizedPath(pathname, "en")}` });
