@@ -68,7 +68,7 @@ function InteractiveMoveGuide() {
         <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">Interactive move guide</p>
         <h2 className="mt-2 text-2xl font-semibold sm:text-3xl">See exactly which face to turn</h2>
         <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">
-          Select a move below. The highlighted face shows which side you are turning, while the arrow shows the direction. For clockwise and counterclockwise moves, imagine you are looking directly at the face being turned.
+          Select a move below. The 3D cube animates the exact layer that turns, and the dimmed cubies stay still. For clockwise and counterclockwise moves, imagine you are looking directly at the face being turned.
         </p>
       </div>
 
