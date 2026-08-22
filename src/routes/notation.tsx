@@ -1,7 +1,193 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, RotateCw } from "lucide-react";
+import { ArrowLeft, RotateCcw, RotateCw } from "lucide-react";
+import { useState } from "react";
 
-export const Route = createFileRoute("/notation")({ head: () => ({ meta: [{ title: "Rubik's Cube Notation – Complete Move Guide | RubikSolver" }, { name: "description", content: "Learn Rubik's Cube notation with visual guides for R, L, U, D, F, B, prime, and double moves. Understand the move sequences used by RubikSolver." }] }), component: NotationPage });
-const moves = [["R","Right","Turn the right face clockwise when looking directly at the right face."],["R'","Right inverse","Turn the right face counterclockwise when looking directly at the right face."],["R2","Right double","Turn the right face 180 degrees."],["L","Left","Turn the left face clockwise when looking directly at the left face."],["L'","Left inverse","Turn the left face counterclockwise when looking directly at the left face."],["L2","Left double","Turn the left face 180 degrees."],["U","Up","Turn the top face clockwise when looking directly at the top face."],["U'","Up inverse","Turn the top face counterclockwise when looking directly at the top face."],["U2","Up double","Turn the top face 180 degrees."],["D","Down","Turn the bottom face clockwise when looking directly at the bottom face."],["D'","Down inverse","Turn the bottom face counterclockwise when looking directly at the bottom face."],["D2","Down double","Turn the bottom face 180 degrees."],["F","Front","Turn the front face clockwise when looking directly at the front face."],["F'","Front inverse","Turn the front face counterclockwise when looking directly at the front face."],["F2","Front double","Turn the front face 180 degrees."],["B","Back","Turn the back face clockwise when looking directly at the back face."],["B'","Back inverse","Turn the back face counterclockwise when looking directly at the back face."],["B2","Back double","Turn the back face 180 degrees."]] as const;
-function MoveDiagram({move}:{move:string}){const prime=move.includes("'");const double=move.includes("2");const angle=double?180:prime?-90:90;return <div className="flex h-44 items-center justify-center rounded-xl border border-border bg-surface-2"><div className="relative"><div className="grid grid-cols-3 gap-1 rounded-lg border-2 border-border bg-background p-2 shadow-sm">{Array.from({length:9}).map((_,i)=><span key={i} className="size-7 rounded border border-border bg-cube-r sm:size-8"/>)}</div><div className="absolute -right-14 top-1/2 text-primary" style={{transform:`translateY(-50%) rotate(${angle}deg)`}}><RotateCw className="size-10"/></div><div className="absolute -bottom-8 left-1/2 -translate-x-1/2 font-display text-xl font-semibold text-foreground">{move}</div></div></div>}
-export function NotationPage({homeHref="/"}:{homeHref?:string}){return <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14"><Link to={homeHref as any} className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground"><ArrowLeft className="size-4"/> Home</Link><header className="mt-8 max-w-3xl"><p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">Learn the language</p><h1 className="mt-2 text-4xl font-semibold sm:text-5xl">Rubik's Cube Move Notation</h1><p className="mt-4 text-lg text-muted-foreground">Every move in a solution tells you which face to turn and how far. Use these visual guides to learn Rubik's Cube notation and read solution sequences with confidence.</p></header><section className="mt-10 panel p-6 sm:p-8"><h2 className="text-2xl font-semibold">What Do the Rubik's Cube Letters Mean?</h2><p className="mt-2 max-w-2xl text-sm text-muted-foreground"><strong className="text-foreground">R</strong> = Right, <strong className="text-foreground">L</strong> = Left, <strong className="text-foreground">U</strong> = Up, <strong className="text-foreground">D</strong> = Down, <strong className="text-foreground">F</strong> = Front, and <strong className="text-foreground">B</strong> = Back. The letter tells you which face to turn.</p><div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{moves.map(([move,face,description])=><article key={move} className="rounded-xl border border-border bg-background/50 p-4"><MoveDiagram move={move}/><h3 className="mt-5 font-semibold">{face}</h3><p className="mt-1 text-sm text-muted-foreground">{description}</p></article>)}</div></section><section className="mt-8 grid gap-4 md:grid-cols-3"><div className="panel p-6"><h2 className="font-semibold">What Does R Mean?</h2><p className="mt-2 text-sm text-muted-foreground">R means a 90° clockwise turn of the right face, viewed directly from that face.</p></div><div className="panel p-6"><h2 className="font-semibold">What Does R' Mean?</h2><p className="mt-2 text-sm text-muted-foreground">R' means a 90° counterclockwise turn of the right face. The prime symbol means reverse the direction.</p></div><div className="panel p-6"><h2 className="font-semibold">What Does R2 Mean?</h2><p className="mt-2 text-sm text-muted-foreground">R2 means turn the right face 180°. Direction does not matter for a half turn.</p></div></section><section className="mt-8 panel p-6 sm:p-8"><h2 className="text-2xl font-semibold">What Does R U R' U' Mean?</h2><p className="mt-2 max-w-3xl text-sm text-muted-foreground">R U R' U' is a common four-move sequence. Read it from left to right: turn the right face, then the top face, reverse the right face, and reverse the top face. You will see sequences like this in beginner methods and speedcubing algorithms.</p><Link to="/solver/$puzzle" params={{ puzzle: "3x3" }} className="mt-5 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Try the 3x3 solver</Link></section></div>}
+export const Route = createFileRoute("/notation")({
+  head: () => ({
+    meta: [
+      { title: "Rubik's Cube Notation – Complete Move Guide | RubikSolver" },
+      {
+        name: "description",
+        content:
+          "Learn Rubik's Cube notation with interactive visual guides for R, L, U, D, F, B, prime, and double moves. See which face moves, which direction to turn, and how algorithms are read.",
+      },
+    ],
+  }),
+  component: NotationPage,
+});
+
+type Move = {
+  notation: string;
+  face: string;
+  direction: "clockwise" | "counterclockwise" | "double";
+  description: string;
+};
+
+const moves: Move[] = [
+  ["R", "Right", "clockwise", "Turn the right face 90° clockwise when looking directly at the right face."],
+  ["R'", "Right", "counterclockwise", "Turn the right face 90° counterclockwise when looking directly at the right face."],
+  ["R2", "Right", "double", "Turn the right face 180°. A double turn works in either direction."],
+  ["L", "Left", "clockwise", "Turn the left face 90° clockwise when looking directly at the left face."],
+  ["L'", "Left", "counterclockwise", "Turn the left face 90° counterclockwise when looking directly at the left face."],
+  ["L2", "Left", "double", "Turn the left face 180°."],
+  ["U", "Up", "clockwise", "Turn the top face 90° clockwise when looking directly at the top face."],
+  ["U'", "Up", "counterclockwise", "Turn the top face 90° counterclockwise when looking directly at the top face."],
+  ["U2", "Up", "double", "Turn the top face 180°."],
+  ["D", "Down", "clockwise", "Turn the bottom face 90° clockwise when looking directly at the bottom face."],
+  ["D'", "Down", "counterclockwise", "Turn the bottom face 90° counterclockwise when looking directly at the bottom face."],
+  ["D2", "Down", "double", "Turn the bottom face 180°."],
+  ["F", "Front", "clockwise", "Turn the front face 90° clockwise when looking directly at the front face."],
+  ["F'", "Front", "counterclockwise", "Turn the front face 90° counterclockwise when looking directly at the front face."],
+  ["F2", "Front", "double", "Turn the front face 180°."],
+  ["B", "Back", "clockwise", "Turn the back face 90° clockwise when looking directly at the back face."],
+  ["B'", "Back", "counterclockwise", "Turn the back face 90° counterclockwise when looking directly at the back face."],
+  ["B2", "Back", "double", "Turn the back face 180°."],
+].map(([notation, face, direction, description]) => ({ notation, face, direction, description })) as Move[];
+
+const faceClass: Record<string, string> = {
+  Front: "bg-cube-f",
+  Right: "bg-cube-r",
+  Left: "bg-cube-l",
+  Up: "bg-cube-u",
+  Down: "bg-cube-d",
+  Back: "bg-cube-b",
+};
+
+function CubeDiagram({ move }: { move: Move }) {
+  const arrowClass =
+    move.direction === "counterclockwise"
+      ? "rotate-180"
+      : move.direction === "double"
+        ? "rotate-90"
+        : "";
+
+  return (
+    <div className="relative flex min-h-[250px] items-center justify-center overflow-hidden rounded-2xl border border-border bg-surface-2 p-6">
+      <div className="absolute left-4 top-4 rounded-full border border-border bg-background/90 px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm">
+        {move.face} face
+      </div>
+
+      <div className="relative mt-5 h-36 w-36 sm:h-40 sm:w-40">
+        <div className="absolute left-1/2 top-0 grid h-24 w-24 -translate-x-1/2 -skew-x-12 -skew-y-6 grid-cols-3 gap-1 rounded-lg border-2 border-foreground/20 bg-cube-u p-1 shadow-md">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <span key={i} className="rounded-sm border border-black/10 bg-white/20" />
+          ))}
+        </div>
+        <div className="absolute bottom-0 left-0 grid h-24 w-24 skew-y-6 grid-cols-3 gap-1 rounded-lg border-2 border-foreground/20 bg-cube-l p-1 shadow-md">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <span key={i} className="rounded-sm border border-black/10 bg-white/20" />
+          ))}
+        </div>
+        <div className={`absolute bottom-0 right-0 grid h-24 w-24 -skew-y-6 grid-cols-3 gap-1 rounded-lg border-2 border-foreground/20 p-1 shadow-md ${faceClass[move.face]}`}>
+          {Array.from({ length: 9 }).map((_, i) => (
+            <span key={i} className="rounded-sm border border-black/10 bg-white/20" />
+          ))}
+        </div>
+
+        <div className={`absolute -right-7 bottom-7 flex size-14 items-center justify-center rounded-full border-2 border-primary bg-background/95 text-primary shadow-lg transition-transform duration-300 ${arrowClass}`}>
+          {move.direction === "counterclockwise" ? <RotateCcw className="size-7" /> : <RotateCw className="size-7" />}
+        </div>
+      </div>
+
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 text-xs font-medium shadow-sm">
+        {move.direction === "double" ? "180° turn" : move.direction === "clockwise" ? "90° clockwise" : "90° counterclockwise"}
+      </div>
+    </div>
+  );
+}
+
+function InteractiveMoveGuide() {
+  const [selected, setSelected] = useState<Move>(moves[0]);
+
+  return (
+    <section className="mt-10 overflow-hidden rounded-2xl border border-border bg-surface-2 p-5 sm:p-8">
+      <div className="max-w-3xl">
+        <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">Interactive move guide</p>
+        <h2 className="mt-2 text-2xl font-semibold sm:text-3xl">See exactly which face to turn</h2>
+        <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">
+          Select a move below. The highlighted face shows which side you are turning, while the arrow shows the direction. For clockwise and counterclockwise moves, imagine you are looking directly at the face being turned.
+        </p>
+      </div>
+
+      <div className="mt-7 grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        <CubeDiagram move={selected} />
+        <div>
+          <div className="rounded-xl border border-border bg-background p-5">
+            <div className="flex items-center gap-3">
+              <span className="font-display text-3xl font-semibold">{selected.notation}</span>
+              <span className="rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">{selected.face} face</span>
+            </div>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">{selected.description}</p>
+          </div>
+          <div className="mt-4 grid grid-cols-3 gap-2 sm:grid-cols-6">
+            {moves.filter((move) => !move.notation.includes("2") && ["R", "L", "U", "D", "F", "B"].includes(move.notation)).map((move) => (
+              <button key={move.notation} type="button" onClick={() => setSelected(move)} className={`rounded-lg border px-3 py-2 text-sm font-semibold transition hover:border-primary hover:bg-primary/5 ${selected.notation === move.notation ? "border-primary bg-primary/10 text-primary" : "border-border bg-background"}`}>
+                {move.notation}
+              </button>
+            ))}
+          </div>
+          <div className="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-6">
+            {moves.filter((move) => move.notation.includes("'") || move.notation.includes("2")).map((move) => (
+              <button key={move.notation} type="button" onClick={() => setSelected(move)} className={`rounded-lg border px-3 py-2 text-sm font-semibold transition hover:border-primary hover:bg-primary/5 ${selected.notation === move.notation ? "border-primary bg-primary/10 text-primary" : "border-border bg-background"}`}>
+                {move.notation}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function NotationPage({ homeHref = "/" }: { homeHref?: string }) {
+  return (
+    <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+      <Link to={homeHref as any} className="inline-flex items-center gap-2 text-sm text-muted-foreground transition hover:text-foreground">
+        <ArrowLeft className="size-4" /> Home
+      </Link>
+
+      <header className="mt-8 max-w-3xl">
+        <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary">Learn the language</p>
+        <h1 className="mt-2 text-4xl font-semibold sm:text-5xl">Rubik's Cube Move Notation</h1>
+        <p className="mt-4 text-lg leading-8 text-muted-foreground">
+          Every move in a solution tells you which face to turn and how far. Use these interactive visual guides to learn Rubik's Cube notation, understand move direction, and read solution sequences with confidence.
+        </p>
+      </header>
+
+      <InteractiveMoveGuide />
+
+      <section className="mt-10 panel p-6 sm:p-8">
+        <h2 className="text-2xl font-semibold">What Do the Rubik's Cube Letters Mean?</h2>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
+          R = Right, L = Left, U = Up, D = Down, F = Front, and B = Back. The letter tells you which face to turn. The prime symbol (') means turn that face in the opposite direction, while 2 means make a 180° turn.
+        </p>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {moves.map((move) => (
+            <article key={move.notation} className="rounded-xl border border-border bg-background/50 p-4">
+              <CubeDiagram move={move} />
+              <div className="mt-5 flex items-center justify-between gap-3">
+                <h3 className="font-display text-xl font-semibold">{move.notation}</h3>
+                <span className="text-xs font-medium text-muted-foreground">{move.face} face</span>
+              </div>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">{move.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-8 grid gap-4 md:grid-cols-3">
+        <div className="panel p-6"><h2 className="font-semibold">What Does R Mean?</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">R means a 90° clockwise turn of the right face, viewed directly from that face.</p></div>
+        <div className="panel p-6"><h2 className="font-semibold">What Does R' Mean?</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">R' means a 90° counterclockwise turn of the right face. The prime symbol means reverse the direction.</p></div>
+        <div className="panel p-6"><h2 className="font-semibold">What Does R2 Mean?</h2><p className="mt-2 text-sm leading-6 text-muted-foreground">R2 means turn the right face 180°. Direction does not matter for a half turn.</p></div>
+      </section>
+
+      <section className="mt-8 panel p-6 sm:p-8">
+        <h2 className="text-2xl font-semibold">What Does R U R' U' Mean?</h2>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
+          R U R' U' is a common four-move sequence. Read it from left to right: turn the right face, then the top face, reverse the right face, and reverse the top face. You will see sequences like this in beginner methods and speedcubing algorithms.
+        </p>
+        <Link to="/solver/$puzzle" params={{ puzzle: "3x3" }} className="mt-5 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Try the 3x3 solver</Link>
+      </section>
+    </div>
+  );
+}
