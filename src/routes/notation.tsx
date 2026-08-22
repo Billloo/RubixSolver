@@ -90,7 +90,7 @@ function InteractiveMoveGuide() {
       </div>
 
       <div className="mt-7 grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-        <CubeDiagram move={selected} />
+        <CubeDiagram move={selected} autoPlay />
         <div>
           <div className="rounded-xl border border-border bg-background p-5">
             <div className="flex items-center gap-3">
