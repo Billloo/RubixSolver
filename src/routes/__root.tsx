@@ -5,6 +5,21 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { copy, LANGUAGES, type Locale } from "@/lib/i18n";
 
+const SITE_URL = "https://rubiksolver.pro";
+
+function getLocaleFromPath(pathname: string): Locale {
+  const first = pathname.split("/").filter(Boolean)[0];
+  return (LANGUAGES.some(l => l.code === first) ? first : "en") as Locale;
+}
+
+function getLocalizedPath(pathname: string, locale: Locale): string {
+  const parts = pathname.split("/").filter(Boolean);
+  const hasLocale = LANGUAGES.some(l => l.code === parts[0]);
+  const path = hasLocale ? parts.slice(1).join("/") : parts.join("/");
+  if (locale === "en") return path ? `/${path}` : "/";
+  return path ? `/${locale}/${path}` : `/${locale}/`;
+}
+
 function NotFoundComponent() { return <div className="flex min-h-screen items-center justify-center bg-background px-4"><div className="max-w-md text-center"><h1 className="text-7xl font-bold text-foreground">404</h1><h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2><p className="mt-2 text-sm text-muted-foreground">The page you're looking for doesn't exist or has been moved.</p><div className="mt-6"><Link to="/" className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Go home</Link></div></div></div>; }
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) { const router = useRouter(); useEffect(() => { reportLovableError(error, { boundary: "tanstack_root_error_component" }); }, [error]); return <div className="flex min-h-screen items-center justify-center bg-background px-4"><div className="max-w-md text-center"><h1 className="text-xl font-semibold text-foreground">This page didn't load</h1><p className="mt-2 text-sm text-muted-foreground">Something went wrong on our end. You can try refreshing or head back home.</p><div className="mt-6 flex justify-center gap-2"><button onClick={() => { router.invalidate(); reset(); }} className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Try again</button><a href="/" className="rounded-md border border-input px-4 py-2 text-sm font-medium">Go home</a></div></div></div>; }
 
@@ -12,17 +27,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({ meta: [{ charSet: "utf-8" }, { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" }, { name: "author", content: "RubikSolver" }, { name: "theme-color", content: "#131a22" }, { name: "apple-mobile-web-app-capable", content: "yes" }, { name: "mobile-web-app-capable", content: "yes" }, { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" }, { name: "apple-mobile-web-app-title", content: "RubikSolver" }, { name: "format-detection", content: "telephone=no" }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary_large_image" }], links: [{ rel: "stylesheet", href: appCss }, { rel: "icon", href: "/favicon.ico", type: "image/x-icon" }, { rel: "apple-touch-icon", href: "/favicon.ico" }, { rel: "preconnect", href: "https://fonts.googleapis.com" }, { rel: "preconnect", href: "https://fonts.gstatic.com" }, { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" }] }),
   shellComponent: RootShell, component: RootComponent, notFoundComponent: NotFoundComponent, errorComponent: ErrorComponent,
 });
-function RootShell({ children }: { children: ReactNode }) { return <html lang="en"><head><HeadContent /><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3080193901352059" crossOrigin="anonymous" /></head><body>{children}<Scripts /></body></html>; }
+
+function RootShell({ children }: { children: ReactNode }) {
+  return <html lang="en"><head><HeadContent /><script dangerouslySetInnerHTML={{ __html: `(() => { const supported = ${JSON.stringify(LANGUAGES.map(l => l.code))}; const first = location.pathname.split('/').filter(Boolean)[0]; document.documentElement.lang = supported.includes(first) ? first : 'en'; })();` }} /><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3080193901352059" crossOrigin="anonymous" /></head><body>{children}<Scripts /></body></html>;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: s => s.location.pathname });
   const parts = pathname.split("/").filter(Boolean);
-  const lang = (LANGUAGES.some(l => l.code === parts[0]) ? parts[0] : "en") as Locale;
+  const lang = getLocaleFromPath(pathname);
   const c = copy[lang] || copy.en;
   const localized = lang !== "en";
   const href = (path: string) => localized ? `/${lang}/${path}` : `/${path}`;
   const homeHref = localized ? `/${lang}/` : "/";
   const onHomePage = (localized && parts.length === 1) || (!localized && parts.length === 0);
+  const alternateLinks = LANGUAGES.map(language => ({
+    rel: "alternate",
+    hrefLang: language.code,
+    href: `${SITE_URL}${getLocalizedPath(pathname, language.code)}`,
+  }));
+  alternateLinks.push({ rel: "alternate", hrefLang: "x-default", href: `${SITE_URL}${getLocalizedPath(pathname, "en")}` });
   useEffect(() => { document.documentElement.lang = lang; }, [lang]);
   return <QueryClientProvider client={queryClient}><div className="flex min-h-screen flex-col bg-background text-foreground"><header className="sticky top-0 z-20 border-b border-border/70 bg-background/85 pt-[env(safe-area-inset-top)] backdrop-blur"><div className="mx-auto grid w-full max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:flex sm:justify-between sm:gap-4 sm:px-6 sm:py-4"><Link to={homeHref as any} className="truncate font-display text-lg font-semibold tracking-tight">Rubik<span className="text-primary">Solver</span></Link><div className="contents sm:flex sm:items-center sm:gap-4">{onHomePage && <select aria-label="Language" value={lang} onChange={e => { const next=e.target.value; window.location.href=next === "en" ? "/" : `/${next}/`; }} className="order-2 shrink-0 rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm">{LANGUAGES.map(l => <option key={l.code} value={l.code}>{l.native}</option>)}</select>}<nav className="order-3 col-span-2 -mx-1 flex items-center gap-1 overflow-x-auto text-sm [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:order-1 sm:col-auto sm:mx-0 sm:overflow-visible"><Link to={href("solver/2x2") as any} className="shrink-0 rounded-lg px-3 py-2 text-muted-foreground transition hover:text-foreground">2x2</Link><Link to={href("solver/3x3") as any} className="shrink-0 rounded-lg px-3 py-2 text-muted-foreground transition hover:text-foreground">3x3</Link><Link to={href("notation") as any} className="shrink-0 rounded-lg px-3 py-2 text-muted-foreground transition hover:text-foreground">{c.notation}</Link><Link to={href("algorithms") as any} className="shrink-0 rounded-lg px-3 py-2 text-muted-foreground transition hover:text-foreground">Algorithms</Link><Link to={href("learn/how-to-solve-a-rubiks-cube") as any} className="shrink-0 rounded-lg px-3 py-2 text-muted-foreground transition hover:text-foreground">Learn</Link><Link to={href("scramble-generator") as any} className="shrink-0 rounded-lg px-3 py-2 text-muted-foreground transition hover:text-foreground">Scramble</Link><Link to={href("timer") as any} className="shrink-0 rounded-lg px-3 py-2 text-muted-foreground transition hover:text-foreground">{c.timer}</Link></nav></div></div></header><main className="flex-1 pb-[env(safe-area-inset-bottom)]"><Outlet /></main></div></QueryClientProvider>;
 }
