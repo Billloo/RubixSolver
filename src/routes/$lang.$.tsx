@@ -65,7 +65,9 @@ export const Route = createFileRoute("/$lang/$")({
     const data = content[lang][section];
     const title = data ? data[0] : path === "notation" ? c.notationTitle : path === "timer" ? c.timerTitle : path === "solver/3x3" ? c.solver3Title : c.solver2Title;
     const description = data ? data[1] : path === "notation" ? c.notationDescription : path === "timer" ? c.timerDescription : path === "solver/3x3" ? c.solver3Description : c.solver2Description;
-    return { meta: [{ title }, { name: "description", content: description }], links: LANGUAGES.map((x) => ({ rel: "alternate", hrefLang: x.code, href: x.code === "en" ? `https://rubiksolver.pro/${path}` : `https://rubiksolver.pro/${x.code}/${path}` })).concat([{ rel: "canonical", href: lang === "en" ? `https://rubiksolver.pro/${path}` : `https://rubiksolver.pro/${lang}/${path}` }]) };
+    const links: { rel: string; hrefLang?: string; href: string }[] = LANGUAGES.map((x) => ({ rel: "alternate", hrefLang: x.code as string, href: x.code === "en" ? `https://rubiksolver.pro/${path}` : `https://rubiksolver.pro/${x.code}/${path}` }));
+    links.push({ rel: "canonical", href: lang === "en" ? `https://rubiksolver.pro/${path}` : `https://rubiksolver.pro/${lang}/${path}` });
+    return { meta: [{ title }, { name: "description", content: description }], links };
   },
   component: LocalizedPage,
 });
@@ -79,7 +81,7 @@ function LocalizedPage() {
   }
   if (path === "notation") return <SimplePage lang={lang} title={c.notationTitle} description={c.notationDescription} home={c.home} links={[`R = ${lang === "es" ? "Derecha" : lang === "fr" ? "Droite" : lang === "de" ? "Rechts" : "Right"}`, "L = Left", "U = Up", "D = Down", "F = Front", "B = Back", "R' = inverse turn", "R2 = 180° turn"]} />;
   if (path === "timer") return <SimplePage lang={lang} title={c.timerTitle} description={c.timerDescription} home={c.home} links={[c.solve3, c.solve2, "Scramble generator", "Ao5", "Solve history"]} />;
-  const data = content[lang][path as SectionKey];
+  const data = (content[lang] as Record<string, readonly unknown[]>)[path as SectionKey];
   if (!data) throw notFound();
   const items = Array.isArray(data[2]) ? data[2] as string[] : [data[2] as string];
   return <SimplePage lang={lang} title={data[0] as string} description={data[1] as string} home={c.home} links={items} path={path} />;
