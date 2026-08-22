@@ -46,12 +46,20 @@ const moves: Move[] = [
 ].map(([notation, face, direction, description]) => ({ notation, face, direction, description })) as Move[];
 
 function CubeDiagram({ move, size = "md" }: { move: Move; size?: "md" | "sm" }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
-    <div className="relative flex min-h-[230px] items-center justify-center overflow-hidden rounded-2xl border border-border bg-surface-2 p-4">
+    <div
+      className="relative flex min-h-[230px] items-center justify-center overflow-hidden rounded-2xl border border-border bg-surface-2 p-4"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
+    >
       <div className="absolute left-4 top-4 rounded-full border border-border bg-background/90 px-3 py-1 text-xs font-medium text-muted-foreground shadow-sm">
         {move.face} face
       </div>
-      <CubeMove3D notation={move.notation} className={size === "sm" ? "scale-90" : ""} />
+      <CubeMove3D notation={move.notation} className={size === "sm" ? "scale-90" : ""} autoPlay={hovered} />
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-background/90 px-3 py-1 text-xs font-medium shadow-sm">
         {move.direction === "double" ? "180° turn" : move.direction === "clockwise" ? "90° clockwise" : "90° counterclockwise"}
       </div>
