@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://rubiksolver.pro/</loc></url><url><loc>https://rubiksolver.pro/notation</loc></url><url><loc>https://rubiksolver.pro/timer</loc></url><url><loc>https://rubiksolver.pro/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/solver/3x3</loc></url>
-  <url><loc>https://rubiksolver.pro/learn/how-to-solve-a-rubiks-cube</loc></url><url><loc>https://rubiksolver.pro/algorithms</loc></url><url><loc>https://rubiksolver.pro/algorithms/f2l</loc></url><url><loc>https://rubiksolver.pro/scramble-generator</loc></url><url><loc>https://rubiksolver.pro/guides/what-is-cfop</loc></url>
+  <url><loc>https://rubiksolver.pro/</loc></url>
+  <url><loc>https://rubiksolver.pro/notation</loc></url>
+  <url><loc>https://rubiksolver.pro/timer</loc></url>
+  <url><loc>https://rubiksolver.pro/solver/2x2</loc></url>
+  <url><loc>https://rubiksolver.pro/solver/3x3</loc></url>
+  <url><loc>https://rubiksolver.pro/learn/how-to-solve-a-rubiks-cube</loc></url>
+  <url><loc>https://rubiksolver.pro/algorithms</loc></url>
+  <url><loc>https://rubiksolver.pro/algorithms/f2l</loc></url>
+  <url><loc>https://rubiksolver.pro/algorithms/oll</loc></url>
+  <url><loc>https://rubiksolver.pro/algorithms/pll</loc></url>
+  <url><loc>https://rubiksolver.pro/scramble-generator</loc></url>
+  <url><loc>https://rubiksolver.pro/guides/what-is-cfop</loc></url>
   <url><loc>https://rubiksolver.pro/hi/</loc></url><url><loc>https://rubiksolver.pro/hi/notation</loc></url><url><loc>https://rubiksolver.pro/hi/timer</loc></url><url><loc>https://rubiksolver.pro/hi/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/hi/solver/3x3</loc></url>
   <url><loc>https://rubiksolver.pro/zh/</loc></url><url><loc>https://rubiksolver.pro/zh/notation</loc></url><url><loc>https://rubiksolver.pro/zh/timer</loc></url><url><loc>https://rubiksolver.pro/zh/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/zh/solver/3x3</loc></url>
   <url><loc>https://rubiksolver.pro/es/</loc></url><url><loc>https://rubiksolver.pro/es/notation</loc></url><url><loc>https://rubiksolver.pro/es/timer</loc></url><url><loc>https://rubiksolver.pro/es/solver/2x2</loc></url><url><loc>https://rubiksolver.pro/es/solver/3x3</loc></url>
